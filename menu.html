@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Menu | Engenharia de Produção</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    min-height:100vh;
+    font-family:Arial, Helvetica, sans-serif;
+    color:white;
+
+    background:
+        radial-gradient(circle at 80% 10%, rgba(255,193,7,.10), transparent 25%),
+        linear-gradient(135deg,#07111f,#0c1d31,#102a43);
+}
+
+/* ================= FUNDO ================= */
+
+.background{
+    position:fixed;
+    inset:0;
+    overflow:hidden;
+    z-index:0;
+}
+
+.grid{
+    position:absolute;
+    inset:0;
+
+    background-image:
+        linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,.045) 1px, transparent 1px);
+
+    background-size:45px 45px;
+}
+
+.circle{
+    position:absolute;
+    border:1px solid rgba(255,193,7,.10);
+    border-radius:50%;
+}
+
+.circle1{
+    width:600px;
+    height:600px;
+    right:-250px;
+    top:-300px;
+}
+
+.circle2{
+    width:700px;
+    height:700px;
+    left:-450px;
+    bottom:-500px;
+}
+
+/* ================= CONTEÚDO ================= */
+
+.container{
+    position:relative;
+    z-index:2;
+
+    width:min(1150px,92%);
+    margin:auto;
+
+    padding:55px 0 70px;
+}
+
+/* ================= CABEÇALHO ================= */
+
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    margin-bottom:55px;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:13px;
+}
+
+.logo-icon{
+    width:45px;
+    height:45px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:12px;
+
+    background:#ffc107;
+    color:#101820;
+
+    font-size:22px;
+    font-weight:bold;
+
+    box-shadow:0 8px 25px rgba(255,193,7,.15);
+}
+
+.logo-text{
+    font-size:15px;
+    font-weight:bold;
+    letter-spacing:1px;
+}
+
+.logo-text span{
+    display:block;
+
+    color:#7e91a7;
+
+    font-size:10px;
+    font-weight:normal;
+
+    margin-top:4px;
+}
+
+/* BOTÃO VOLTAR */
+
+.back{
+    color:#8497aa;
+    text-decoration:none;
+
+    font-size:13px;
+
+    transition:.2s;
+}
+
+.back:hover{
+    color:#ffc107;
+}
+
+/* ================= TÍTULO ================= */
+
+.intro{
+    margin-bottom:35px;
+}
+
+.tag{
+    display:inline-block;
+
+    color:#ffc107;
+
+    font-size:11px;
+    font-weight:bold;
+
+    letter-spacing:2px;
+
+    margin-bottom:15px;
+}
+
+h1{
+    font-size:clamp(35px,5vw,55px);
+
+    letter-spacing:-2px;
+
+    margin-bottom:12px;
+}
+
+.intro p{
+    color:#8fa1b4;
+
+    font-size:16px;
+
+    max-width:600px;
+
+    line-height:1.6;
+}
+
+/* ================= CARDS ================= */
+
+.cards{
+    display:grid;
+
+    grid-template-columns:
+        repeat(auto-fit,minmax(270px,1fr));
+
+    gap:20px;
+}
+
+/* CARD */
+
+.card{
+    position:relative;
+
+    min-height:210px;
+
+    padding:27px;
+
+    border-radius:18px;
+
+    border:1px solid rgba(255,255,255,.09);
+
+    background:rgba(255,255,255,.045);
+
+    backdrop-filter:blur(10px);
+
+    text-decoration:none;
+    color:white;
+
+    overflow:hidden;
+
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-6px);
+
+    border-color:rgba(255,193,7,.45);
+
+    background:rgba(255,255,255,.065);
+
+    box-shadow:
+        0 20px 50px rgba(0,0,0,.25);
+}
+
+/* CARD PRINCIPAL */
+
+.card.main{
+    border-color:rgba(255,193,7,.28);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,193,7,.09),
+            rgba(255,255,255,.035)
+        );
+}
+
+/* ÍCONE */
+
+.icon{
+    width:52px;
+    height:52px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:14px;
+
+    background:rgba(255,193,7,.12);
+
+    color:#ffc107;
+
+    font-size:24px;
+
+    margin-bottom:23px;
+}
+
+/* TEXTO CARD */
+
+.card h2{
+    font-size:21px;
+
+    margin-bottom:9px;
+}
+
+.card p{
+    color:#8799ad;
+
+    font-size:13px;
+
+    line-height:1.55;
+
+    max-width:390px;
+}
+
+/* SETA */
+
+.card-arrow{
+    position:absolute;
+
+    right:25px;
+    bottom:22px;
+
+    color:#ffc107;
+
+    font-size:20px;
+
+    transition:.25s;
+}
+
+.card:hover .card-arrow{
+    transform:translateX(6px);
+}
+
+/* ================= CARDS EM BREVE ================= */
+
+.card.disabled{
+    opacity:.55;
+    cursor:default;
+}
+
+.card.disabled:hover{
+    transform:none;
+
+    border-color:rgba(255,255,255,.09);
+
+    box-shadow:none;
+}
+
+.coming{
+    position:absolute;
+
+    top:20px;
+    right:20px;
+
+    padding:5px 9px;
+
+    border-radius:20px;
+
+    background:rgba(255,255,255,.06);
+
+    color:#718398;
+
+    font-size:9px;
+
+    letter-spacing:1px;
+}
+
+/* ================= RODAPÉ ================= */
+
+.footer{
+    margin-top:55px;
+
+    padding-top:20px;
+
+    border-top:1px solid rgba(255,255,255,.06);
+
+    display:flex;
+    justify-content:space-between;
+
+    color:#52667c;
+
+    font-size:10px;
+
+    letter-spacing:1px;
+}
+
+/* ================= CELULAR ================= */
+
+@media(max-width:600px){
+
+    .container{
+        padding-top:30px;
+    }
+
+    .header{
+        margin-bottom:40px;
+    }
+
+    .logo-text{
+        font-size:13px;
+    }
+
+    .back{
+        font-size:12px;
+    }
+
+    .cards{
+        grid-template-columns:1fr;
+    }
+
+    .card{
+        min-height:190px;
+    }
+
+    .footer{
+        flex-direction:column;
+        gap:8px;
+        text-align:center;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- FUNDO -->
+
+<div class="background">
+
+    <div class="grid"></div>
+
+    <div class="circle circle1"></div>
+    <div class="circle circle2"></div>
+
+</div>
+
+
+<div class="container">
+
+    <!-- CABEÇALHO -->
+
+    <header class="header">
+
+        <div class="logo">
+
+            <div class="logo-icon">
+                ⚙
+            </div>
+
+            <div class="logo-text">
+
+                ENGENHARIA DE PRODUÇÃO
+
+                <span>
+                    CENTRAL DE ESTUDOS
+                </span>
+
+            </div>
+
+        </div>
+
+        <a href="index.html" class="back">
+            ← Início
+        </a>
+
+    </header>
+
+
+    <!-- INTRODUÇÃO -->
+
+    <section class="intro">
+
+        <div class="tag">
+            MENU PRINCIPAL
+        </div>
+
+        <h1>
+            O que você quer aprender?
+        </h1>
+
+        <p>
+            Escolha uma área e comece a explorar os conteúdos
+            da Engenharia de Produção.
+        </p>
+
+    </section>
+
+
+    <!-- CARDS -->
+
+    <section class="cards">
+
+
+        <!-- GERENCIAMENTO DE PROJETOS -->
+
+        <a href="gerenciamento-projetos.html"
+           class="card main">
+
+            <div class="icon">
+                📊
+            </div>
+
+            <h2>
+                Gerenciamento de Projetos
+            </h2>
+
+            <p>
+                Aprenda a planejar, organizar e acompanhar
+                projetos de forma prática e simples.
+            </p>
+
+            <div class="card-arrow">
+                →
+            </div>
+
+        </a>
+
+
+        <!-- PRÓXIMA ABA -->
+
+        <div class="card disabled">
+
+            <div class="coming">
+                EM BREVE
+            </div>
+
+            <div class="icon">
+                📐
+            </div>
+
+            <h2>
+                Desenho Técnico
+            </h2>
+
+            <p>
+                Conteúdos para ajudar você a entender
+                desenho e representação técnica.
+            </p>
+
+        </div>
+
+
+        <!-- PRÓXIMA ABA -->
+
+        <div class="card disabled">
+
+            <div class="coming">
+                EM BREVE
+            </div>
+
+            <div class="icon">
+                🧮
+            </div>
+
+            <h2>
+                Matemática
+            </h2>
+
+            <p>
+                Ferramentas e materiais para facilitar
+                sua jornada nas disciplinas matemáticas.
+            </p>
+
+        </div>
+
+
+        <!-- PRÓXIMA ABA -->
+
+        <div class="card disabled">
+
+            <div class="coming">
+                EM BREVE
+            </div>
+
+            <div class="icon">
+                🏭
+            </div>
+
+            <h2>
+                Processos Industriais
+            </h2>
+
+            <p>
+                Conheça conceitos e ferramentas utilizados
+                nos processos de produção.
+            </p>
+
+        </div>
+
+
+        <!-- PRÓXIMA ABA -->
+
+        <div class="card disabled">
+
+            <div class="coming">
+                EM BREVE
+            </div>
+
+            <div class="icon">
+                📈
+            </div>
+
+            <h2>
+                Gestão e Qualidade
+            </h2>
+
+            <p>
+                Conceitos fundamentais de gestão,
+                qualidade e melhoria contínua.
+            </p>
+
+        </div>
+
+
+        <!-- PRÓXIMA ABA -->
+
+        <div class="card disabled">
+
+            <div class="coming">
+                EM BREVE
+            </div>
+
+            <div class="icon">
+                💡
+            </div>
+
+            <h2>
+                Dicas para Calouros
+            </h2>
+
+            <p>
+                Organização, estudos e dicas para
+                começar bem a faculdade.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- RODAPÉ -->
+
+    <footer class="footer">
+
+        <span>
+            ENGENHARIA DE PRODUÇÃO
+        </span>
+
+        <span>
+            APRENDA • ORGANIZE • EVOLUA
+        </span>
+
+    </footer>
+
+</div>
+
+</body>
+</html>

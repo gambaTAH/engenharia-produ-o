@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>TAP | Termo de Abertura do Projeto</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    color:white;
+    min-height:100vh;
+
+    background:
+    radial-gradient(circle at 80% 10%,rgba(255,193,7,.10),transparent 25%),
+    linear-gradient(135deg,#07111f,#0c1d31,#102a43);
+}
+
+/* FUNDO */
+
+.background{
+    position:fixed;
+    inset:0;
+    z-index:-1;
+    overflow:hidden;
+}
+
+.grid{
+    position:absolute;
+    inset:0;
+
+    background-image:
+    linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);
+
+    background-size:45px 45px;
+}
+
+.circle{
+    position:absolute;
+    border:1px solid rgba(255,193,7,.1);
+    border-radius:50%;
+}
+
+.c1{
+    width:600px;
+    height:600px;
+    right:-300px;
+    top:-300px;
+}
+
+.c2{
+    width:700px;
+    height:700px;
+    left:-500px;
+    bottom:-500px;
+}
+
+/* CONTAINER */
+
+.container{
+    width:min(1150px,94%);
+    margin:auto;
+    padding:35px 0 60px;
+}
+
+/* TOPO */
+
+.top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:35px;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.logo-icon{
+    width:44px;
+    height:44px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:#ffc107;
+    color:#111;
+
+    border-radius:12px;
+    font-size:21px;
+}
+
+.logo h2{
+    font-size:14px;
+    letter-spacing:1px;
+}
+
+.logo span{
+    display:block;
+    font-size:10px;
+    color:#72869b;
+    margin-top:4px;
+}
+
+.back{
+    color:#8193a6;
+    text-decoration:none;
+    font-size:13px;
+}
+
+.back:hover{
+    color:#ffc107;
+}
+
+/* CABEÇALHO */
+
+.header{
+    margin-bottom:25px;
+}
+
+.tag{
+    color:#ffc107;
+    font-size:11px;
+    letter-spacing:2px;
+    font-weight:bold;
+    margin-bottom:10px;
+}
+
+h1{
+    font-size:clamp(34px,5vw,52px);
+    letter-spacing:-2px;
+    margin-bottom:10px;
+}
+
+.subtitle{
+    color:#899caf;
+    font-size:15px;
+    line-height:1.6;
+    max-width:750px;
+}
+
+/* AÇÕES */
+
+.actions{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:25px;
+}
+
+.btn{
+    border:0;
+    border-radius:10px;
+
+    padding:12px 18px;
+
+    font-weight:bold;
+    font-size:12px;
+
+    cursor:pointer;
+    transition:.2s;
+}
+
+.btn-primary{
+    background:#ffc107;
+    color:#111;
+}
+
+.btn-primary:hover{
+    background:#ffd54a;
+    transform:translateY(-2px);
+}
+
+.btn-secondary{
+    background:rgba(255,255,255,.07);
+    border:1px solid rgba(255,255,255,.1);
+    color:#c8d3df;
+}
+
+.btn-secondary:hover{
+    border-color:rgba(255,193,7,.4);
+    color:#ffc107;
+}
+
+/* DOCUMENTO */
+
+.document{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+}
+
+/* SEÇÕES */
+
+.section{
+    padding:22px;
+
+    border-radius:15px;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    background:rgba(255,255,255,.045);
+
+    backdrop-filter:blur(8px);
+}
+
+.section-title{
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+    margin-bottom:18px;
+}
+
+.section-number{
+    width:28px;
+    height:28px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:8px;
+
+    background:rgba(255,193,7,.12);
+
+    color:#ffc107;
+
+    font-size:12px;
+    font-weight:bold;
+}
+
+.section-title h2{
+    font-size:14px;
+}
+
+/* CAMPOS */
+
+.fields{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:15px;
+}
+
+.field{
+    display:flex;
+    flex-direction:column;
+    gap:7px;
+}
+
+.field.full{
+    grid-column:1/-1;
+}
+
+label{
+    color:#9caec0;
+    font-size:11px;
+    font-weight:bold;
+    letter-spacing:.3px;
+}
+
+input,
+textarea,
+select{
+    width:100%;
+
+    border:1px solid rgba(255,255,255,.08);
+    outline:none;
+
+    border-radius:9px;
+
+    padding:12px;
+
+    background:rgba(0,0,0,.18);
+
+    color:#e3ebf3;
+
+    font-family:Arial,Helvetica,sans-serif;
+    font-size:13px;
+
+    transition:.2s;
+}
+
+input{
+    height:42px;
+}
+
+textarea{
+    min-height:100px;
+    resize:vertical;
+    line-height:1.5;
+}
+
+input::placeholder,
+textarea::placeholder{
+    color:#607388;
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+    border-color:rgba(255,193,7,.5);
+
+    box-shadow:
+    0 0 0 2px rgba(255,193,7,.06);
+}
+
+select{
+    height:42px;
+}
+
+/* DESTAQUE */
+
+.highlight{
+    border-color:rgba(255,193,7,.22);
+
+    background:
+    linear-gradient(
+        135deg,
+        rgba(255,193,7,.07),
+        rgba(255,255,255,.035)
+    );
+}
+
+/* STATUS */
+
+.status{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.status-dot{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:#55d88a;
+    box-shadow:0 0 10px rgba(85,216,138,.4);
+}
+
+/* RODAPÉ */
+
+.info{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    margin-top:18px;
+
+    color:#596d82;
+    font-size:10px;
+}
+
+.saved{
+    color:#55d88a;
+}
+
+/* IMPRESSÃO */
+
+@media print{
+
+    body{
+        background:white;
+        color:#111;
+    }
+
+    .background,
+    .top,
+    .actions,
+    .info{
+        display:none;
+    }
+
+    .container{
+        width:100%;
+        padding:0;
+    }
+
+    .header{
+        color:#111;
+    }
+
+    .tag{
+        color:#555;
+    }
+
+    .subtitle{
+        color:#555;
+    }
+
+    .section{
+        border:1px solid #aaa;
+        background:white;
+        color:#111;
+
+        break-inside:avoid;
+    }
+
+    .section-title h2,
+    .section-number{
+        color:#111;
+    }
+
+    input,
+    textarea,
+    select{
+        color:#111;
+        background:white;
+        border:1px solid #aaa;
+    }
+
+    input::placeholder,
+    textarea::placeholder{
+        color:transparent;
+    }
+
+    label{
+        color:#333;
+    }
+}
+
+/* RESPONSIVO */
+
+@media(max-width:700px){
+
+    .container{
+        padding-top:25px;
+    }
+
+    .fields{
+        grid-template-columns:1fr;
+    }
+
+    .field.full{
+        grid-column:auto;
+    }
+
+    .actions{
+        width:100%;
+    }
+
+    .btn{
+        flex:1;
+    }
+
+    .info{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:7px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="background">
+    <div class="grid"></div>
+    <div class="circle c1"></div>
+    <div class="circle c2"></div>
+</div>
+
+
+<div class="container">
+
+    <!-- TOPO -->
+
+    <header class="top">
+
+        <div class="logo">
+
+            <div class="logo-icon">
+                ⚙
+            </div>
+
+            <div>
+                <h2>ENGENHARIA DE PRODUÇÃO</h2>
+                <span>GERENCIAMENTO DE PROJETOS</span>
+            </div>
+
+        </div>
+
+        <a href="gerenciamento-projetos.html" class="back">
+            ← Ferramentas
+        </a>
+
+    </header>
+
+
+    <!-- CABEÇALHO -->
+
+    <section class="header">
+
+        <div class="tag">
+            FERRAMENTA 02
+        </div>
+
+        <h1>
+            Termo de Abertura do Projeto
+        </h1>
+
+        <p class="subtitle">
+            O documento que autoriza formalmente o início do projeto
+            e define suas principais informações.
+        </p>
+
+    </section>
+
+
+    <!-- AÇÕES -->
+
+    <div class="actions">
+
+        <button class="btn btn-primary" onclick="salvar()">
+            💾 Salvar projeto
+        </button>
+
+        <button class="btn btn-secondary" onclick="window.print()">
+            🖨️ Imprimir / PDF
+        </button>
+
+        <button class="btn btn-secondary" onclick="limpar()">
+            🗑️ Limpar
+        </button>
+
+    </div>
+
+
+    <!-- DOCUMENTO -->
+
+    <main class="document">
+
+
+        <!-- 01 -->
+
+        <section class="section highlight">
+
+            <div class="section-title">
+
+                <div class="section-number">
+                    01
+                </div>
+
+                <h2>IDENTIFICAÇÃO DO PROJETO</h2>
+
+            </div>
+
+
+            <div class="fields">
+
+                <div class="field full">
+
+                    <label>
+                        NOME DO PROJETO
+                    </label>
+
+                    <input
+                        id="nome"
+                        type="text"
+                        placeholder="Ex.: Implantação de um sistema de controle de estoque"
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        RESPONSÁVEL / GERENTE DO PROJETO
+                    </label>
+
+                    <input
+                        id="gerente"
+                        type="text"
+                        placeholder="Nome do responsável"
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        PATROCINADOR
+                    </label>
+
+                    <input
+                        id="patrocinador"
+                        type="text"
+                        placeholder="Pessoa ou organização"
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        DATA DE INÍCIO
+                    </label>
+
+                    <input
+                        id="inicio"
+                        type="date"
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        DATA PREVISTA DE TÉRMINO
+                    </label>
+
+                    <input
+                        id="termino"
+                        type="date"
+                    >
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- 02 -->
+
+        <section class="section">
+
+            <div class="section-title">
+
+                <div class="section-number">
+                    02
+                </div>
+
+                <h2>JUSTIFICATIVA</h2>
+
+            </div>
+
+
+            <div class="fields">
+
+                <div class="field full">
+
+                    <label>
+                        POR QUE ESTE PROJETO PRECISA SER REALIZADO?
+                    </label>
+
+                    <textarea
+                        id="justificativa"
+                        placeholder="Explique o problema, oportunidade ou necessidade que originou o projeto."
+                    ></textarea>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- 03 -->
+
+        <section class="section">
+
+            <div class="section-title">
+
+                <div class="section-number">
+                    03
+                </div>
+
+                <h2>OBJETIVOS</h2>
+
+            </div>
+
+
+            <div class="fields">
+
+                <div class="field full">
+
+                    <label>
+                        OBJETIVO GERAL
+                    </label>
+
+                    <textarea
+                        id="objetivo"
+                        placeholder="O que o projeto pretende alcançar?"
+                    ></textarea>
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        RESULTADOS ESPERADOS
+                    </label>
+
+                    <textarea
+                        id="resultados"
+                        placeholder="Quais resultados deverão ser alcançados?"
+                    ></textarea>
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        CRITÉRIOS DE SUCESSO
+                    </label>
+
+                    <textarea
+                        id="sucesso"
+                        placeholder="Como saberemos que o projeto foi bem-sucedido?"
+                    ></textarea>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- 04 -->
+
+        <section class="section">
+
+            <div class="section-title">
+
+                <div class="section-number">
+                    04
+                </div>
+
+                <h2>ESCOPO INICIAL</h2>
+
+            </div>
+
+
+            <div class="fields">
+
+                <div class="field">
+
+                    <label>
+                        O QUE ESTÁ INCLUÍDO?
+                    </label>
+
+                    <textarea
+                        id="incluido"
+                        placeholder="Principais entregas e atividades incluídas."
+                    ></textarea>
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        O QUE NÃO ESTÁ INCLUÍDO?
+                    </label>
+
+                    <textarea
+                        id="naoincluido"
+                        placeholder="Deixe claro o que ficará fora do projeto."
+                    ></textarea>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- 05 -->
+
+        <section class="section">
+
+            <div class="section-title">
+
+                <div class="section-number">
+                    05
+                </div>
+
+                <h2>PRINCIPAIS ENTREGAS</h2>
+
+            </div>
+
+
+            <div class="fields">
+
+                <div class="field full">
+
+                    <label>
+                        ENTREGAS DO PROJETO
+                    </label>
+
+                    <textarea
+                        id="entregas"
+                        placeholder="Liste os principais produtos, serviços ou resultados que serão entregues."
+                    ></textarea>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- 06 -->
+
+        <section class="section">
+
+            <div class="section-title">
+
+                <div class="section-number">
+                    06
+                </div>
+
+                <h2>PREMISSAS E RESTRIÇÕES</h2>
+
+            </div>
+
+
+            <div class="fields">
+
+                <div class="field">
+
+                    <label>
+                        PREMISSAS
+                    </label>
+
+                    <textarea
+                        id="premissas"
+                        placeholder="Condições consideradas verdadeiras para o planejamento."
+                    ></textarea>
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        RESTRIÇÕES
+                    </label>
+
+                    <textarea
+                        id="restricoes"
+                        placeholder="Limitações de prazo, dinheiro, pessoas, materiais etc."
+                    ></textarea>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- 07 -->
+
+        <section class="section">
+
+            <div class="section-title">
+
+                <div class="section-number">
+                    07
+                </div>
+
+                <h2>RECURSOS E ORÇAMENTO</h2>
+
+            </div>
+
+
+            <div class="fields">
+
+                <div class="field">
+
+                    <label>
+                        RECURSOS NECESSÁRIOS
+                    </label>
+
+                    <textarea
+                        id="recursos"
+                        placeholder="Pessoas, equipamentos, materiais, softwares etc."
+                    ></textarea>
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        ORÇAMENTO ESTIMADO
+                    </label>
+
+                    <input
+                        id="orcamento"
+                        type="text"
+                        placeholder="Ex.: R$ 15.000,00"
+                    >
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- 08 -->
+
+        <section class="section">
+
+            <div class="section-title">
+
+                <div class="section-number">
+                    08
+                </div>
+
+                <h2>PRINCIPAIS RISCOS</h2>
+
+            </div>
+
+
+            <div class="fields">
+
+                <div class="field full">
+
+                    <label>
+                        RISCOS INICIAIS IDENTIFICADOS
+                    </label>
+
+                    <textarea
+                        id="riscos"
+                        placeholder="Liste os principais riscos que podem afetar o projeto."
+                    ></textarea>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- 09 -->
+
+        <section class="section">
+
+            <div class="section-title">
+
+                <div class="section-number">
+                    09
+                </div>
+
+                <h2>STAKEHOLDERS</h2>
+
+            </div>
+
+
+            <div class="fields">
+
+                <div class="field full">
+
+                    <label>
+                        PRINCIPAIS PARTES INTERESSADAS
+                    </label>
+
+                    <textarea
+                        id="stakeholders"
+                        placeholder="Quem participa, influencia ou será afetado pelo projeto?"
+                    ></textarea>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- 10 -->
+
+        <section class="section highlight">
+
+            <div class="section-title">
+
+                <div class="section-number">
+                    10
+                </div>
+
+                <h2>APROVAÇÃO DO PROJETO</h2>
+
+            </div>
+
+
+            <div class="fields">
+
+                <div class="field">
+
+                    <label>
+                        STATUS
+                    </label>
+
+                    <select id="statusProjeto">
+
+                        <option value="Em elaboração">
+                            Em elaboração
+                        </option>
+
+                        <option value="Aguardando aprovação">
+                            Aguardando aprovação
+                        </option>
+
+                        <option value="Aprovado">
+                            Aprovado
+                        </option>
+
+                        <option value="Reprovado">
+                            Reprovado
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        DATA DA APROVAÇÃO
+                    </label>
+
+                    <input
+                        id="dataAprovacao"
+                        type="date"
+                    >
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <div class="info">
+
+        <span>
+            💡 Dica: o TAP deve ser criado antes do planejamento detalhado.
+        </span>
+
+        <span class="saved" id="saved">
+            ● Salvamento automático
+        </span>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* CAMPOS */
+
+const campos = [
+
+    "nome",
+    "gerente",
+    "patrocinador",
+    "inicio",
+    "termino",
+
+    "justificativa",
+
+    "objetivo",
+    "resultados",
+    "sucesso",
+
+    "incluido",
+    "naoincluido",
+
+    "entregas",
+
+    "premissas",
+    "restricoes",
+
+    "recursos",
+    "orcamento",
+
+    "riscos",
+
+    "stakeholders",
+
+    "statusProjeto",
+    "dataAprovacao"
+
+];
+
+
+/* CARREGAR */
+
+window.addEventListener("load",()=>{
+
+    campos.forEach(id=>{
+
+        const valor =
+        localStorage.getItem("tap_"+id);
+
+        if(valor !== null){
+
+            document.getElementById(id).value =
+            valor;
+
+        }
+
+    });
+
+});
+
+
+/* SALVAR */
+
+function salvar(){
+
+    campos.forEach(id=>{
+
+        const campo =
+        document.getElementById(id);
+
+        localStorage.setItem(
+            "tap_"+id,
+            campo.value
+        );
+
+    });
+
+    mostrarStatus("✓ TAP salvo");
+
+}
+
+
+/* SALVAMENTO AUTOMÁTICO */
+
+campos.forEach(id=>{
+
+    const campo =
+    document.getElementById(id);
+
+    campo.addEventListener("input",()=>{
+
+        localStorage.setItem(
+            "tap_"+id,
+            campo.value
+        );
+
+        mostrarStatus(
+            "● Salvando automaticamente..."
+        );
+
+    });
+
+});
+
+
+/* STATUS */
+
+let timer;
+
+function mostrarStatus(texto){
+
+    const status =
+    document.getElementById("saved");
+
+    status.textContent =
+    texto;
+
+    clearTimeout(timer);
+
+    timer=setTimeout(()=>{
+
+        status.textContent =
+        "● Salvamento automático";
+
+    },1500);
+
+}
+
+
+/* LIMPAR */
+
+function limpar(){
+
+    const confirmar =
+    confirm(
+        "Tem certeza que deseja apagar todo o TAP?"
+    );
+
+    if(!confirmar)return;
+
+    campos.forEach(id=>{
+
+        document.getElementById(id).value="";
+
+        localStorage.removeItem(
+            "tap_"+id
+        );
+
+    });
+
+    mostrarStatus("TAP limpo");
+
+}
+
+</script>
+
+</body>
+</html>

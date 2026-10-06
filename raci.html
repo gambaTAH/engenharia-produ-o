@@ -1,0 +1,1545 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Matriz RACI - Engenharia de Produção</title>
+
+<style>
+:root{
+  --bg:#06101f;
+  --bg2:#0a1830;
+  --card:#0e2038;
+  --line:rgba(255,255,255,.10);
+  --text:#f4f7fb;
+  --muted:#91a3ba;
+  --gold:#f4c542;
+  --gold2:#ffd95a;
+  --blue:#1677ff;
+  --green:#35d07f;
+  --orange:#ffad42;
+  --red:#ff5c67;
+  --purple:#a875ff;
+  --shadow:0 20px 50px rgba(0,0,0,.35);
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  font-family:Arial,Helvetica,sans-serif;
+  color:var(--text);
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 10% 10%,rgba(22,119,255,.15),transparent 28%),
+    radial-gradient(circle at 90% 80%,rgba(244,197,66,.08),transparent 30%),
+    linear-gradient(135deg,var(--bg),var(--bg2));
+}
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  opacity:.07;
+  background-image:
+    linear-gradient(rgba(255,255,255,.3) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.3) 1px,transparent 1px);
+  background-size:40px 40px;
+}
+
+header{
+  padding:24px 7%;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  position:relative;
+  z-index:2;
+  background:rgba(6,16,31,.78);
+  backdrop-filter:blur(12px);
+}
+
+.logo{
+  font-weight:900;
+  letter-spacing:1px;
+}
+
+.logo span{
+  color:var(--gold);
+}
+
+.back{
+  color:var(--muted);
+  text-decoration:none;
+  font-size:14px;
+}
+
+.back:hover{
+  color:var(--gold);
+}
+
+main{
+  width:min(1250px,94%);
+  margin:45px auto 70px;
+  position:relative;
+  z-index:1;
+}
+
+.hero{
+  margin-bottom:30px;
+}
+
+.tag{
+  color:var(--gold);
+  font-size:12px;
+  font-weight:bold;
+  letter-spacing:2px;
+}
+
+h1{
+  font-size:clamp(32px,5vw,52px);
+  margin:10px 0 14px;
+}
+
+.hero p{
+  max-width:850px;
+  color:var(--muted);
+  line-height:1.6;
+}
+
+.card{
+  background:linear-gradient(145deg,rgba(18,41,70,.92),rgba(9,26,47,.94));
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:25px;
+  margin-bottom:22px;
+  box-shadow:var(--shadow);
+}
+
+.card-title{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:20px;
+}
+
+.number{
+  width:34px;
+  height:34px;
+  display:grid;
+  place-items:center;
+  border-radius:10px;
+  background:rgba(244,197,66,.12);
+  border:1px solid rgba(244,197,66,.3);
+  color:var(--gold);
+  font-weight:bold;
+}
+
+.card-title h2{
+  font-size:20px;
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:16px;
+}
+
+.field{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+}
+
+.field.full{
+  grid-column:1/-1;
+}
+
+label{
+  font-size:13px;
+  color:#c8d3e2;
+  font-weight:bold;
+}
+
+input,select{
+  width:100%;
+  background:#08182b;
+  color:var(--text);
+  border:1px solid var(--line);
+  border-radius:11px;
+  padding:13px 14px;
+  outline:none;
+  font-size:14px;
+}
+
+input:focus,
+select:focus{
+  border-color:rgba(244,197,66,.7);
+  box-shadow:0 0 0 3px rgba(244,197,66,.08);
+}
+
+.actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:20px;
+}
+
+button{
+  border:0;
+  border-radius:11px;
+  padding:12px 18px;
+  font-weight:bold;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.btn-primary{
+  background:var(--gold);
+  color:#101820;
+}
+
+.btn-primary:hover{
+  background:var(--gold2);
+  transform:translateY(-2px);
+}
+
+.btn-secondary{
+  background:#193452;
+  color:white;
+  border:1px solid var(--line);
+}
+
+.btn-secondary:hover{
+  background:#244667;
+}
+
+.btn-danger{
+  background:rgba(255,92,103,.12);
+  color:#ff7d86;
+  border:1px solid rgba(255,92,103,.2);
+}
+
+.btn-danger:hover{
+  background:rgba(255,92,103,.22);
+}
+
+/* EXPLICAÇÃO */
+
+.explanation{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+}
+
+.raci-info{
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.035);
+  border-radius:14px;
+  padding:18px;
+}
+
+.raci-letter{
+  font-size:27px;
+  font-weight:900;
+  margin-bottom:7px;
+}
+
+.raci-info:nth-child(1) .raci-letter{
+  color:var(--green);
+}
+
+.raci-info:nth-child(2) .raci-letter{
+  color:var(--gold);
+}
+
+.raci-info:nth-child(3) .raci-letter{
+  color:var(--blue);
+}
+
+.raci-info:nth-child(4) .raci-letter{
+  color:var(--purple);
+}
+
+.raci-info strong{
+  display:block;
+  margin-bottom:5px;
+}
+
+.raci-info p{
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.5;
+}
+
+/* MATRIZ */
+
+.matrix-wrap{
+  overflow:auto;
+  border:1px solid var(--line);
+  border-radius:15px;
+  background:#08182b;
+}
+
+.matrix{
+  border-collapse:collapse;
+  width:100%;
+  min-width:850px;
+}
+
+.matrix th,
+.matrix td{
+  border-right:1px solid rgba(255,255,255,.07);
+  border-bottom:1px solid rgba(255,255,255,.07);
+}
+
+.matrix th{
+  background:#0b1c32;
+  padding:13px 10px;
+  font-size:11px;
+  color:var(--muted);
+  text-transform:uppercase;
+  min-width:125px;
+}
+
+.matrix th.activity-header{
+  min-width:260px;
+  text-align:left;
+}
+
+.matrix td{
+  padding:8px;
+  text-align:center;
+}
+
+.activity-cell{
+  text-align:left!important;
+  padding:13px!important;
+}
+
+.activity-cell strong{
+  display:block;
+  font-size:13px;
+}
+
+.activity-cell small{
+  color:var(--muted);
+  font-size:10px;
+}
+
+.person-header{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:4px;
+}
+
+.person-name{
+  color:var(--text);
+  font-size:11px;
+}
+
+.remove-person{
+  font-size:9px;
+  padding:3px 6px;
+  background:rgba(255,92,103,.1);
+  color:#ff7d86;
+}
+
+/* CÉLULAS RACI */
+
+.raci-select{
+  width:60px;
+  height:44px;
+  padding:0;
+  text-align:center;
+  text-align-last:center;
+  border-radius:9px;
+  font-size:17px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.raci-select.none{
+  color:var(--muted);
+  background:#0a1b2e;
+}
+
+.raci-select.r{
+  color:#67dfa0;
+  background:rgba(53,208,127,.12);
+  border-color:rgba(53,208,127,.3);
+}
+
+.raci-select.a{
+  color:var(--gold);
+  background:rgba(244,197,66,.12);
+  border-color:rgba(244,197,66,.3);
+}
+
+.raci-select.c{
+  color:#70aaff;
+  background:rgba(22,119,255,.12);
+  border-color:rgba(22,119,255,.3);
+}
+
+.raci-select.i{
+  color:#b88aff;
+  background:rgba(168,117,255,.12);
+  border-color:rgba(168,117,255,.3);
+}
+
+/* ALERTAS */
+
+.validation{
+  margin-top:18px;
+  display:grid;
+  gap:8px;
+}
+
+.alert{
+  padding:12px 14px;
+  border-radius:10px;
+  font-size:12px;
+  border:1px solid;
+}
+
+.alert.ok{
+  color:#67dfa0;
+  background:rgba(53,208,127,.07);
+  border-color:rgba(53,208,127,.2);
+}
+
+.alert.warning{
+  color:#ffc46f;
+  background:rgba(255,173,66,.07);
+  border-color:rgba(255,173,66,.2);
+}
+
+.alert.error{
+  color:#ff7d86;
+  background:rgba(255,92,103,.07);
+  border-color:rgba(255,92,103,.2);
+}
+
+/* LEGENDA */
+
+.legend{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:18px;
+}
+
+.legend-item{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 11px;
+  border-radius:8px;
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--line);
+  font-size:11px;
+}
+
+.legend-letter{
+  font-weight:900;
+  font-size:15px;
+}
+
+.legend-r{color:var(--green);}
+.legend-a{color:var(--gold);}
+.legend-c{color:#70aaff;}
+.legend-i{color:#b88aff;}
+
+/* STATS */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+}
+
+.stat{
+  padding:18px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:rgba(255,255,255,.035);
+}
+
+.stat span{
+  display:block;
+  color:var(--muted);
+  font-size:11px;
+  margin-bottom:7px;
+}
+
+.stat strong{
+  font-size:24px;
+}
+
+/* DICA */
+
+.tip{
+  margin-top:18px;
+  padding:15px;
+  border-left:3px solid var(--gold);
+  border-radius:10px;
+  background:rgba(244,197,66,.06);
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.5;
+}
+
+.tip strong{
+  color:var(--gold);
+}
+
+/* PRINT */
+
+@media print{
+
+  body{
+    background:white;
+    color:#111;
+  }
+
+  body::before,
+  header,
+  .hero .tag,
+  .form-card,
+  .actions,
+  .remove-person{
+    display:none!important;
+  }
+
+  main{
+    width:100%;
+    margin:0;
+  }
+
+  .card{
+    box-shadow:none;
+    background:white;
+    border:1px solid #ccc;
+    color:#111;
+  }
+
+  .matrix-wrap{
+    overflow:visible;
+    background:white;
+  }
+
+  .matrix{
+    min-width:0;
+  }
+
+  .matrix th{
+    background:#eee;
+    color:#222;
+  }
+
+  .matrix td{
+    color:#111;
+  }
+
+  .raci-select{
+    appearance:none;
+    border:0;
+    background:white!important;
+  }
+
+}
+
+/* MOBILE */
+
+@media(max-width:800px){
+
+  header{
+    padding:20px;
+  }
+
+  main{
+    width:94%;
+    margin-top:30px;
+  }
+
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+
+  .field.full{
+    grid-column:auto;
+  }
+
+  .explanation{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .stats{
+    grid-template-columns:1fr 1fr;
+  }
+
+}
+
+@media(max-width:500px){
+
+  .explanation{
+    grid-template-columns:1fr;
+  }
+
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+  <div class="logo">
+    ENGENHARIA <span>DE PRODUÇÃO</span>
+  </div>
+
+  <a
+    href="gerenciamento-projetos.html"
+    class="back"
+  >
+    ← Voltar para Gerenciamento de Projetos
+  </a>
+
+</header>
+
+
+<main>
+
+<section class="hero">
+
+  <span class="tag">FERRAMENTA DE PROJETOS</span>
+
+  <h1>Matriz RACI</h1>
+
+  <p>
+    Defina claramente <strong>quem faz, quem aprova,
+    quem deve ser consultado e quem precisa ser informado</strong>
+    em cada atividade do projeto.
+  </p>
+
+</section>
+
+
+<!-- EXPLICAÇÃO -->
+
+<section class="card">
+
+  <div class="card-title">
+    <div class="number">01</div>
+    <h2>O que significa RACI?</h2>
+  </div>
+
+  <div class="explanation">
+
+    <div class="raci-info">
+      <div class="raci-letter">R</div>
+      <strong>Responsible</strong>
+      <p>
+        Pessoa que executa o trabalho e é responsável
+        por realizar a atividade.
+      </p>
+    </div>
+
+    <div class="raci-info">
+      <div class="raci-letter">A</div>
+      <strong>Accountable</strong>
+      <p>
+        Pessoa que responde pelo resultado e aprova
+        a entrega.
+      </p>
+    </div>
+
+    <div class="raci-info">
+      <div class="raci-letter">C</div>
+      <strong>Consulted</strong>
+      <p>
+        Pessoa que deve ser consultada antes ou durante
+        a execução.
+      </p>
+    </div>
+
+    <div class="raci-info">
+      <div class="raci-letter">I</div>
+      <strong>Informed</strong>
+      <p>
+        Pessoa que precisa receber informações sobre
+        o andamento ou resultado.
+      </p>
+    </div>
+
+  </div>
+
+  <div class="tip">
+    <strong>💡 Regra importante:</strong>
+    normalmente cada atividade deve ter
+    <strong>um A (Aprovador)</strong>.
+    Pode haver vários R, C ou I conforme a necessidade.
+  </div>
+
+</section>
+
+
+<!-- CONFIGURAÇÃO -->
+
+<section class="card form-card">
+
+  <div class="card-title">
+    <div class="number">02</div>
+    <h2>Configurar matriz</h2>
+  </div>
+
+  <div class="form-grid">
+
+    <div class="field">
+      <label>Nome do projeto</label>
+
+      <input
+        id="projectName"
+        placeholder="Ex.: Implantação de linha de produção"
+      >
+    </div>
+
+    <div class="field">
+      <label>Nome da pessoa / equipe</label>
+
+      <input
+        id="personName"
+        placeholder="Ex.: João"
+      >
+    </div>
+
+  </div>
+
+  <div class="actions">
+
+    <button
+      class="btn-primary"
+      onclick="adicionarPessoa()"
+    >
+      + Adicionar pessoa
+    </button>
+
+    <button
+      class="btn-secondary"
+      onclick="salvarProjeto()"
+    >
+      💾 Salvar projeto
+    </button>
+
+  </div>
+
+</section>
+
+
+<!-- ATIVIDADES -->
+
+<section class="card form-card">
+
+  <div class="card-title">
+    <div class="number">03</div>
+    <h2>Adicionar atividade</h2>
+  </div>
+
+  <div class="form-grid">
+
+    <div class="field full">
+
+      <label>
+        Atividade / Entrega
+      </label>
+
+      <input
+        id="activityName"
+        placeholder="Ex.: Elaborar projeto do processo"
+      >
+
+    </div>
+
+  </div>
+
+  <div class="actions">
+
+    <button
+      class="btn-primary"
+      onclick="adicionarAtividade()"
+    >
+      + Adicionar atividade
+    </button>
+
+  </div>
+
+</section>
+
+
+<!-- ESTATÍSTICAS -->
+
+<section class="card">
+
+  <div class="card-title">
+    <div class="number">04</div>
+    <h2>Resumo da matriz</h2>
+  </div>
+
+  <div class="stats">
+
+    <div class="stat">
+      <span>ATIVIDADES</span>
+      <strong id="statAtividades">0</strong>
+    </div>
+
+    <div class="stat">
+      <span>PESSOAS</span>
+      <strong id="statPessoas">0</strong>
+    </div>
+
+    <div class="stat">
+      <span>ATIVIDADES COM A</span>
+      <strong id="statA">0</strong>
+    </div>
+
+    <div class="stat">
+      <span>ATIVIDADES SEM A</span>
+      <strong id="statSemA">0</strong>
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- MATRIZ -->
+
+<section class="card">
+
+  <div class="card-title">
+    <div class="number">05</div>
+    <h2>Matriz RACI</h2>
+  </div>
+
+  <div class="matrix-wrap">
+
+    <table class="matrix">
+
+      <thead id="matrixHead"></thead>
+
+      <tbody id="matrixBody"></tbody>
+
+    </table>
+
+  </div>
+
+
+  <div class="legend">
+
+    <div class="legend-item">
+      <span class="legend-letter legend-r">R</span>
+      Responsible — Executa
+    </div>
+
+    <div class="legend-item">
+      <span class="legend-letter legend-a">A</span>
+      Accountable — Aprova
+    </div>
+
+    <div class="legend-item">
+      <span class="legend-letter legend-c">C</span>
+      Consulted — Consultado
+    </div>
+
+    <div class="legend-item">
+      <span class="legend-letter legend-i">I</span>
+      Informed — Informado
+    </div>
+
+  </div>
+
+
+  <div
+    class="validation"
+    id="validation"
+  ></div>
+
+</section>
+
+
+<!-- SALVAR -->
+
+<section class="card">
+
+  <div class="card-title">
+    <div class="number">06</div>
+    <h2>Salvar e exportar</h2>
+  </div>
+
+  <p style="color:var(--muted);font-size:14px;line-height:1.5;">
+    A matriz é salva automaticamente neste navegador.
+    Para entregar o documento, use
+    <strong>Imprimir / PDF</strong>.
+  </p>
+
+  <div class="actions">
+
+    <button
+      class="btn-primary"
+      onclick="salvarTudo()"
+    >
+      💾 Salvar agora
+    </button>
+
+    <button
+      class="btn-secondary"
+      onclick="window.print()"
+    >
+      🖨 Imprimir / PDF
+    </button>
+
+    <button
+      class="btn-danger"
+      onclick="apagarTudo()"
+    >
+      🗑 Apagar matriz
+    </button>
+
+  </div>
+
+</section>
+
+</main>
+
+
+<script>
+
+let pessoas =
+  JSON.parse(localStorage.getItem("raci_pessoas")) || [];
+
+let atividades =
+  JSON.parse(localStorage.getItem("raci_atividades")) || [];
+
+let projeto =
+  JSON.parse(localStorage.getItem("raci_projeto")) || {
+    nome:"Meu Projeto"
+  };
+
+
+/*
+  Cada atividade possui:
+
+  {
+    id,
+    nome,
+    responsabilidades:{
+      pessoaId:"R"
+    }
+  }
+*/
+
+
+/* INICIAR */
+
+document.addEventListener("DOMContentLoaded",()=>{
+
+  document.getElementById("projectName").value =
+    projeto.nome || "";
+
+  renderizar();
+
+});
+
+
+/* SALVAR PROJETO */
+
+function salvarProjeto(){
+
+  projeto.nome =
+    document.getElementById("projectName")
+      .value.trim() || "Meu Projeto";
+
+  salvar();
+
+  renderizar();
+
+  alert("Projeto salvo com sucesso!");
+
+}
+
+
+/* ADICIONAR PESSOA */
+
+function adicionarPessoa(){
+
+  const nome =
+    document.getElementById("personName")
+      .value.trim();
+
+  if(!nome){
+
+    alert("Digite o nome da pessoa ou equipe.");
+
+    return;
+
+  }
+
+  const existe =
+    pessoas.some(
+      p=>p.nome.toLowerCase()===nome.toLowerCase()
+    );
+
+  if(existe){
+
+    alert("Essa pessoa já está cadastrada.");
+
+    return;
+
+  }
+
+  pessoas.push({
+
+    id:Date.now(),
+
+    nome:nome
+
+  });
+
+  document.getElementById("personName").value="";
+
+  salvar();
+
+  renderizar();
+
+}
+
+
+/* ADICIONAR ATIVIDADE */
+
+function adicionarAtividade(){
+
+  const nome =
+    document.getElementById("activityName")
+      .value.trim();
+
+  if(!nome){
+
+    alert("Digite o nome da atividade.");
+
+    return;
+
+  }
+
+  atividades.push({
+
+    id:Date.now(),
+
+    nome:nome,
+
+    responsabilidades:{}
+
+  });
+
+  document.getElementById("activityName").value="";
+
+  salvar();
+
+  renderizar();
+
+}
+
+
+/* RENDERIZAR */
+
+function renderizar(){
+
+  renderizarCabecalho();
+
+  renderizarMatriz();
+
+  atualizarEstatisticas();
+
+  validarMatriz();
+
+}
+
+
+/* CABEÇALHO */
+
+function renderizarCabecalho(){
+
+  const head =
+    document.getElementById("matrixHead");
+
+  head.innerHTML="";
+
+  let html=`
+
+    <tr>
+
+      <th class="activity-header">
+        ATIVIDADE / ENTREGA
+      </th>
+
+  `;
+
+
+  pessoas.forEach(p=>{
+
+    html+=`
+
+      <th>
+
+        <div class="person-header">
+
+          <span class="person-name">
+            ${escapar(p.nome)}
+          </span>
+
+          <button
+            class="remove-person"
+            onclick="removerPessoa(${p.id})"
+          >
+            remover
+          </button>
+
+        </div>
+
+      </th>
+
+    `;
+
+  });
+
+
+  html+=`</tr>`;
+
+  head.innerHTML=html;
+
+}
+
+
+/* MATRIZ */
+
+function renderizarMatriz(){
+
+  const body =
+    document.getElementById("matrixBody");
+
+  body.innerHTML="";
+
+
+  if(atividades.length===0){
+
+    body.innerHTML=`
+
+      <tr>
+
+        <td
+          colspan="${Math.max(1,pessoas.length+1)}"
+          style="padding:40px;text-align:center;color:var(--muted);"
+        >
+          Nenhuma atividade cadastrada.
+        </td>
+
+      </tr>
+
+    `;
+
+    return;
+
+  }
+
+
+  atividades.forEach(a=>{
+
+    const tr =
+      document.createElement("tr");
+
+
+    const tdNome =
+      document.createElement("td");
+
+    tdNome.className="activity-cell";
+
+    tdNome.innerHTML=`
+
+      <strong>
+        ${escapar(a.nome)}
+      </strong>
+
+      <small>
+        Defina quem participa desta atividade
+      </small>
+
+    `;
+
+    tr.appendChild(tdNome);
+
+
+    pessoas.forEach(p=>{
+
+      const td =
+        document.createElement("td");
+
+
+      const select =
+        document.createElement("select");
+
+      const valor =
+        a.responsabilidades[p.id] || "";
+
+
+      select.className=
+        "raci-select "+
+        classeRaci(valor);
+
+
+      select.innerHTML=`
+
+        <option value="">—</option>
+        <option value="R">R</option>
+        <option value="A">A</option>
+        <option value="C">C</option>
+        <option value="I">I</option>
+
+      `;
+
+
+      select.value=valor;
+
+
+      select.addEventListener(
+        "change",
+        function(){
+
+          const novoValor=this.value;
+
+          /*
+            Se selecionar A,
+            removemos A de outras pessoas
+            para a mesma atividade.
+          */
+
+          if(novoValor==="A"){
+
+            pessoas.forEach(outra=>{
+
+              if(outra.id!==p.id){
+
+                if(
+                  a.responsabilidades[outra.id]==="A"
+                ){
+
+                  a.responsabilidades[outra.id]="";
+
+                }
+
+              }
+
+            });
+
+          }
+
+
+          if(novoValor){
+
+            a.responsabilidades[p.id]=
+              novoValor;
+
+          }else{
+
+            delete a.responsabilidades[p.id];
+
+          }
+
+
+          salvar();
+
+          renderizar();
+
+        }
+      );
+
+
+      td.appendChild(select);
+
+      tr.appendChild(td);
+
+    });
+
+
+    body.appendChild(tr);
+
+  });
+
+}
+
+
+/* CLASSE RACI */
+
+function classeRaci(valor){
+
+  if(valor==="R") return "r";
+
+  if(valor==="A") return "a";
+
+  if(valor==="C") return "c";
+
+  if(valor==="I") return "i";
+
+  return "none";
+
+}
+
+
+/* VALIDAR */
+
+function validarMatriz(){
+
+  const box =
+    document.getElementById("validation");
+
+  box.innerHTML="";
+
+
+  if(atividades.length===0){
+
+    return;
+
+  }
+
+
+  let erros=0;
+  let avisos=0;
+
+
+  atividades.forEach(a=>{
+
+    const valores =
+      Object.values(a.responsabilidades);
+
+
+    const quantidadeA =
+      valores.filter(v=>v==="A").length;
+
+    const quantidadeR =
+      valores.filter(v=>v==="R").length;
+
+
+    if(quantidadeA===0){
+
+      erros++;
+
+      box.innerHTML+=`
+
+        <div class="alert error">
+
+          ⚠️ <strong>${escapar(a.nome)}</strong>:
+          nenhuma pessoa foi definida como A (Aprovador).
+
+        </div>
+
+      `;
+
+    }
+
+
+    if(quantidadeR===0){
+
+      avisos++;
+
+      box.innerHTML+=`
+
+        <div class="alert warning">
+
+          ⚠️ <strong>${escapar(a.nome)}</strong>:
+          nenhuma pessoa foi definida como R (Responsável pela execução).
+
+        </div>
+
+      `;
+
+    }
+
+  });
+
+
+  if(erros===0 && avisos===0){
+
+    box.innerHTML=`
+
+      <div class="alert ok">
+
+        ✓ Matriz RACI completa:
+        todas as atividades possuem A e R.
+
+      </div>
+
+    `;
+
+  }
+
+}
+
+
+/* ESTATÍSTICAS */
+
+function atualizarEstatisticas(){
+
+  document.getElementById("statAtividades")
+    .textContent=atividades.length;
+
+  document.getElementById("statPessoas")
+    .textContent=pessoas.length;
+
+
+  const comA =
+    atividades.filter(a=>
+
+      Object.values(
+        a.responsabilidades
+      ).includes("A")
+
+    ).length;
+
+
+  document.getElementById("statA")
+    .textContent=comA;
+
+
+  document.getElementById("statSemA")
+    .textContent=
+      Math.max(0,atividades.length-comA);
+
+}
+
+
+/* REMOVER PESSOA */
+
+function removerPessoa(id){
+
+  const pessoa =
+    pessoas.find(p=>p.id===id);
+
+  if(!pessoa) return;
+
+
+  if(!confirm(
+    `Remover "${pessoa.nome}" da matriz?`
+  )) return;
+
+
+  pessoas =
+    pessoas.filter(p=>p.id!==id);
+
+
+  atividades.forEach(a=>{
+
+    delete a.responsabilidades[id];
+
+  });
+
+
+  salvar();
+
+  renderizar();
+
+}
+
+
+/* SALVAR */
+
+function salvar(){
+
+  localStorage.setItem(
+    "raci_pessoas",
+    JSON.stringify(pessoas)
+  );
+
+  localStorage.setItem(
+    "raci_atividades",
+    JSON.stringify(atividades)
+  );
+
+  localStorage.setItem(
+    "raci_projeto",
+    JSON.stringify(projeto)
+  );
+
+}
+
+
+/* SALVAR TUDO */
+
+function salvarTudo(){
+
+  projeto.nome =
+    document.getElementById("projectName")
+      .value.trim() || "Meu Projeto";
+
+  salvar();
+
+  renderizar();
+
+  alert("Matriz RACI salva com sucesso!");
+
+}
+
+
+/* APAGAR */
+
+function apagarTudo(){
+
+  if(
+    pessoas.length===0 &&
+    atividades.length===0
+  ){
+
+    alert("A matriz já está vazia.");
+
+    return;
+
+  }
+
+
+  if(!confirm(
+    "Tem certeza que deseja apagar toda a matriz RACI?"
+  )) return;
+
+
+  pessoas=[];
+  atividades=[];
+
+  salvar();
+
+  renderizar();
+
+}
+
+
+/* SEGURANÇA */
+
+function escapar(texto){
+
+  return String(texto)
+
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
+}
+
+</script>
+
+</body>
+</html>

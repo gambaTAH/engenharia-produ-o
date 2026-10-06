@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Canvas de Projeto | Engenharia de Produção</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    color:white;
+    min-height:100vh;
+
+    background:
+    radial-gradient(circle at 80% 10%,rgba(255,193,7,.10),transparent 25%),
+    linear-gradient(135deg,#07111f,#0c1d31,#102a43);
+}
+
+/* FUNDO */
+
+.background{
+    position:fixed;
+    inset:0;
+    z-index:-1;
+    overflow:hidden;
+}
+
+.grid{
+    position:absolute;
+    inset:0;
+
+    background-image:
+    linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);
+
+    background-size:45px 45px;
+}
+
+.circle{
+    position:absolute;
+    border:1px solid rgba(255,193,7,.1);
+    border-radius:50%;
+}
+
+.c1{
+    width:600px;
+    height:600px;
+    right:-300px;
+    top:-300px;
+}
+
+.c2{
+    width:700px;
+    height:700px;
+    left:-500px;
+    bottom:-500px;
+}
+
+/* CONTAINER */
+
+.container{
+    width:min(1250px,94%);
+    margin:auto;
+    padding:35px 0 60px;
+}
+
+/* TOPO */
+
+.top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:35px;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.logo-icon{
+    width:44px;
+    height:44px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:#ffc107;
+    color:#111;
+
+    border-radius:12px;
+    font-size:21px;
+}
+
+.logo h2{
+    font-size:14px;
+    letter-spacing:1px;
+}
+
+.logo span{
+    display:block;
+    font-size:10px;
+    color:#72869b;
+    margin-top:4px;
+}
+
+.back{
+    color:#8193a6;
+    text-decoration:none;
+    font-size:13px;
+}
+
+.back:hover{
+    color:#ffc107;
+}
+
+/* TÍTULO */
+
+.header{
+    margin-bottom:28px;
+}
+
+.tag{
+    color:#ffc107;
+    font-size:11px;
+    letter-spacing:2px;
+    font-weight:bold;
+    margin-bottom:10px;
+}
+
+h1{
+    font-size:clamp(34px,5vw,52px);
+    letter-spacing:-2px;
+    margin-bottom:10px;
+}
+
+.subtitle{
+    color:#899caf;
+    font-size:15px;
+    line-height:1.6;
+    max-width:700px;
+}
+
+/* BOTÕES */
+
+.actions{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:25px;
+}
+
+.btn{
+    border:0;
+    border-radius:10px;
+
+    padding:12px 18px;
+
+    font-weight:bold;
+    font-size:12px;
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+.btn-primary{
+    background:#ffc107;
+    color:#111;
+}
+
+.btn-primary:hover{
+    background:#ffd54a;
+    transform:translateY(-2px);
+}
+
+.btn-secondary{
+    background:rgba(255,255,255,.07);
+    border:1px solid rgba(255,255,255,.1);
+    color:#c8d3df;
+}
+
+.btn-secondary:hover{
+    border-color:rgba(255,193,7,.4);
+    color:#ffc107;
+}
+
+/* CANVAS */
+
+.canvas{
+    display:grid;
+
+    grid-template-columns:
+    repeat(4,1fr);
+
+    gap:12px;
+}
+
+/* BLOCO */
+
+.block{
+    min-height:190px;
+
+    padding:18px;
+
+    border-radius:14px;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    background:rgba(255,255,255,.045);
+
+    backdrop-filter:blur(8px);
+
+    transition:.2s;
+}
+
+.block:hover{
+    border-color:rgba(255,193,7,.25);
+}
+
+.block-title{
+    display:flex;
+    align-items:center;
+    gap:8px;
+
+    margin-bottom:10px;
+}
+
+.block-title .icon{
+    font-size:17px;
+}
+
+.block-title h2{
+    font-size:13px;
+    letter-spacing:.3px;
+}
+
+.block textarea{
+    width:100%;
+    min-height:120px;
+
+    resize:vertical;
+
+    border:0;
+    outline:none;
+
+    border-radius:8px;
+
+    padding:11px;
+
+    color:#dbe5ef;
+
+    font-family:Arial,Helvetica,sans-serif;
+    font-size:12px;
+    line-height:1.5;
+
+    background:rgba(0,0,0,.18);
+}
+
+.block textarea::placeholder{
+    color:#62758a;
+}
+
+.block textarea:focus{
+    box-shadow:0 0 0 1px rgba(255,193,7,.35);
+}
+
+/* TAMANHOS DOS BLOCOS */
+
+.problem{
+    grid-column:span 2;
+}
+
+.solution{
+    grid-column:span 2;
+}
+
+.objective{
+    grid-column:span 2;
+}
+
+.stakeholders{
+    grid-column:span 2;
+}
+
+.deliverables{
+    grid-column:span 2;
+}
+
+.resources{
+    grid-column:span 2;
+}
+
+/* RODAPÉ */
+
+.info{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    margin-top:18px;
+
+    color:#596d82;
+    font-size:10px;
+}
+
+.saved{
+    color:#55d88a;
+}
+
+/* RESPONSIVO */
+
+@media(max-width:900px){
+
+    .canvas{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .problem,
+    .solution,
+    .objective,
+    .stakeholders,
+    .deliverables,
+    .resources{
+        grid-column:span 2;
+    }
+}
+
+@media(max-width:600px){
+
+    .container{
+        width:92%;
+        padding-top:25px;
+    }
+
+    .top{
+        margin-bottom:30px;
+    }
+
+    .canvas{
+        grid-template-columns:1fr;
+    }
+
+    .problem,
+    .solution,
+    .objective,
+    .stakeholders,
+    .deliverables,
+    .resources{
+        grid-column:span 1;
+    }
+
+    .block{
+        min-height:170px;
+    }
+
+    .actions{
+        width:100%;
+    }
+
+    .btn{
+        flex:1;
+    }
+
+    .info{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:6px;
+    }
+}
+
+/* IMPRESSÃO */
+
+@media print{
+
+    body{
+        background:white;
+        color:#111;
+    }
+
+    .background,
+    .top,
+    .actions,
+    .info{
+        display:none;
+    }
+
+    .container{
+        width:100%;
+        padding:0;
+    }
+
+    .header{
+        color:#111;
+    }
+
+    .tag{
+        color:#555;
+    }
+
+    .subtitle{
+        color:#555;
+    }
+
+    .block{
+        border:1px solid #bbb;
+        background:white;
+        color:#111;
+        break-inside:avoid;
+    }
+
+    .block textarea{
+        color:#111;
+        background:#fafafa;
+    }
+
+    .block textarea::placeholder{
+        color:transparent;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="background">
+    <div class="grid"></div>
+    <div class="circle c1"></div>
+    <div class="circle c2"></div>
+</div>
+
+
+<div class="container">
+
+    <!-- TOPO -->
+
+    <header class="top">
+
+        <div class="logo">
+
+            <div class="logo-icon">
+                ⚙
+            </div>
+
+            <div>
+                <h2>ENGENHARIA DE PRODUÇÃO</h2>
+                <span>GERENCIAMENTO DE PROJETOS</span>
+            </div>
+
+        </div>
+
+        <a href="gerenciamento-projetos.html" class="back">
+            ← Ferramentas
+        </a>
+
+    </header>
+
+
+    <!-- TÍTULO -->
+
+    <section class="header">
+
+        <div class="tag">
+            FERRAMENTA 01
+        </div>
+
+        <h1>
+            Canvas de Projeto
+        </h1>
+
+        <p class="subtitle">
+            Organize sua ideia em um único lugar antes de começar
+            o planejamento detalhado do projeto.
+        </p>
+
+    </section>
+
+
+    <!-- BOTÕES -->
+
+    <div class="actions">
+
+        <button class="btn btn-primary" onclick="salvar()">
+            💾 Salvar projeto
+        </button>
+
+        <button class="btn btn-secondary" onclick="window.print()">
+            🖨️ Imprimir / PDF
+        </button>
+
+        <button class="btn btn-secondary" onclick="limparCanvas()">
+            🗑️ Limpar
+        </button>
+
+    </div>
+
+
+    <!-- CANVAS -->
+
+    <main class="canvas">
+
+
+        <!-- PROBLEMA -->
+
+        <section class="block problem">
+
+            <div class="block-title">
+                <span class="icon">🎯</span>
+                <h2>PROBLEMA / NECESSIDADE</h2>
+            </div>
+
+            <textarea
+                id="problema"
+                placeholder="Qual problema ou necessidade o projeto pretende resolver?"
+            ></textarea>
+
+        </section>
+
+
+        <!-- SOLUÇÃO -->
+
+        <section class="block solution">
+
+            <div class="block-title">
+                <span class="icon">💡</span>
+                <h2>SOLUÇÃO PROPOSTA</h2>
+            </div>
+
+            <textarea
+                id="solucao"
+                placeholder="Qual será a solução desenvolvida?"
+            ></textarea>
+
+        </section>
+
+
+        <!-- OBJETIVO -->
+
+        <section class="block objective">
+
+            <div class="block-title">
+                <span class="icon">🚀</span>
+                <h2>OBJETIVO DO PROJETO</h2>
+            </div>
+
+            <textarea
+                id="objetivo"
+                placeholder="O que o projeto precisa alcançar?"
+            ></textarea>
+
+        </section>
+
+
+        <!-- STAKEHOLDERS -->
+
+        <section class="block stakeholders">
+
+            <div class="block-title">
+                <span class="icon">👥</span>
+                <h2>STAKEHOLDERS</h2>
+            </div>
+
+            <textarea
+                id="stakeholders"
+                placeholder="Quem será afetado, beneficiado ou envolvido no projeto?"
+            ></textarea>
+
+        </section>
+
+
+        <!-- ENTREGAS -->
+
+        <section class="block deliverables">
+
+            <div class="block-title">
+                <span class="icon">📦</span>
+                <h2>PRINCIPAIS ENTREGAS</h2>
+            </div>
+
+            <textarea
+                id="entregas"
+                placeholder="Quais produtos, resultados ou entregas o projeto deverá produzir?"
+            ></textarea>
+
+        </section>
+
+
+        <!-- RECURSOS -->
+
+        <section class="block resources">
+
+            <div class="block-title">
+                <span class="icon">🛠️</span>
+                <h2>RECURSOS NECESSÁRIOS</h2>
+            </div>
+
+            <textarea
+                id="recursos"
+                placeholder="Pessoas, materiais, equipamentos, softwares, dinheiro etc."
+            ></textarea>
+
+        </section>
+
+
+        <!-- PRAZO -->
+
+        <section class="block">
+
+            <div class="block-title">
+                <span class="icon">📅</span>
+                <h2>PRAZO</h2>
+            </div>
+
+            <textarea
+                id="prazo"
+                placeholder="Qual o prazo previsto para o projeto?"
+            ></textarea>
+
+        </section>
+
+
+        <!-- CUSTOS -->
+
+        <section class="block">
+
+            <div class="block-title">
+                <span class="icon">💰</span>
+                <h2>CUSTOS</h2>
+            </div>
+
+            <textarea
+                id="custos"
+                placeholder="Quais são os principais custos estimados?"
+            ></textarea>
+
+        </section>
+
+
+        <!-- RISCOS -->
+
+        <section class="block">
+
+            <div class="block-title">
+                <span class="icon">⚠️</span>
+                <h2>RISCOS</h2>
+            </div>
+
+            <textarea
+                id="riscos"
+                placeholder="O que pode dar errado durante o projeto?"
+            ></textarea>
+
+        </section>
+
+
+        <!-- INDICADORES -->
+
+        <section class="block">
+
+            <div class="block-title">
+                <span class="icon">📈</span>
+                <h2>INDICADORES DE SUCESSO</h2>
+            </div>
+
+            <textarea
+                id="indicadores"
+                placeholder="Como saberemos se o projeto foi bem-sucedido?"
+            ></textarea>
+
+        </section>
+
+
+    </main>
+
+
+    <div class="info">
+
+        <span>
+            💡 Dica: comece preenchendo o problema e o objetivo.
+        </span>
+
+        <span class="saved" id="status">
+            ● Alterações salvas automaticamente
+        </span>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* CAMPOS DO CANVAS */
+
+const campos = [
+    "problema",
+    "solucao",
+    "objetivo",
+    "stakeholders",
+    "entregas",
+    "recursos",
+    "prazo",
+    "custos",
+    "riscos",
+    "indicadores"
+];
+
+
+/* CARREGAR DADOS */
+
+window.onload = function(){
+
+    campos.forEach(id => {
+
+        const valor = localStorage.getItem("canvas_" + id);
+
+        if(valor !== null){
+
+            document.getElementById(id).value = valor;
+
+        }
+
+    });
+
+};
+
+
+/* SALVAR */
+
+function salvar(){
+
+    campos.forEach(id => {
+
+        const elemento = document.getElementById(id);
+
+        localStorage.setItem(
+            "canvas_" + id,
+            elemento.value
+        );
+
+    });
+
+    mostrarStatus("✓ Projeto salvo");
+
+}
+
+
+/* SALVAMENTO AUTOMÁTICO */
+
+campos.forEach(id => {
+
+    const campo = document.getElementById(id);
+
+    campo.addEventListener("input",function(){
+
+        localStorage.setItem(
+            "canvas_" + id,
+            campo.value
+        );
+
+        mostrarStatus("● Salvando automaticamente...");
+
+    });
+
+});
+
+
+/* STATUS */
+
+let statusTimer;
+
+function mostrarStatus(texto){
+
+    const status = document.getElementById("status");
+
+    status.textContent = texto;
+
+    clearTimeout(statusTimer);
+
+    statusTimer = setTimeout(() => {
+
+        status.textContent =
+        "● Alterações salvas automaticamente";
+
+    },1500);
+
+}
+
+
+/* LIMPAR */
+
+function limparCanvas(){
+
+    const confirmar = confirm(
+        "Tem certeza que deseja apagar todo o Canvas?"
+    );
+
+    if(!confirmar) return;
+
+
+    campos.forEach(id => {
+
+        document.getElementById(id).value = "";
+
+        localStorage.removeItem(
+            "canvas_" + id
+        );
+
+    });
+
+    mostrarStatus("Canvas limpo");
+
+}
+
+</script>
+
+</body>
+</html>

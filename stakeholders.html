@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Matriz de Stakeholders</title>
+
+<style>
+:root{
+  --bg:#06101f;
+  --bg2:#0a1830;
+  --card:#0e2038;
+  --card2:#122946;
+  --line:rgba(255,255,255,.10);
+  --text:#f4f7fb;
+  --muted:#91a3ba;
+  --gold:#f4c542;
+  --gold2:#ffd95a;
+  --blue:#1677ff;
+  --green:#35d07f;
+  --red:#ff5c67;
+  --orange:#ffad42;
+  --shadow:0 20px 50px rgba(0,0,0,.35);
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  font-family:Arial,Helvetica,sans-serif;
+  background:
+    radial-gradient(circle at 10% 10%,rgba(22,119,255,.15),transparent 28%),
+    radial-gradient(circle at 90% 80%,rgba(244,197,66,.08),transparent 30%),
+    linear-gradient(135deg,var(--bg),var(--bg2));
+  color:var(--text);
+  min-height:100vh;
+}
+
+/* GRID */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  opacity:.08;
+  background-image:
+    linear-gradient(rgba(255,255,255,.3) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.3) 1px,transparent 1px);
+  background-size:40px 40px;
+}
+
+/* HEADER */
+header{
+  padding:24px 7%;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  position:relative;
+  z-index:2;
+  background:rgba(6,16,31,.75);
+  backdrop-filter:blur(12px);
+}
+
+.logo{
+  font-weight:900;
+  letter-spacing:1px;
+}
+
+.logo span{
+  color:var(--gold);
+}
+
+.back{
+  color:var(--muted);
+  text-decoration:none;
+  font-size:14px;
+  transition:.2s;
+}
+
+.back:hover{
+  color:var(--gold);
+}
+
+/* MAIN */
+main{
+  width:min(1200px,92%);
+  margin:45px auto 70px;
+  position:relative;
+  z-index:1;
+}
+
+.hero{
+  margin-bottom:30px;
+}
+
+.tag{
+  display:inline-block;
+  color:var(--gold);
+  font-size:12px;
+  font-weight:bold;
+  letter-spacing:2px;
+  margin-bottom:10px;
+}
+
+h1{
+  font-size:clamp(30px,5vw,52px);
+  line-height:1;
+  margin-bottom:14px;
+}
+
+.hero p{
+  color:var(--muted);
+  max-width:760px;
+  line-height:1.6;
+}
+
+/* CARDS */
+.card{
+  background:linear-gradient(145deg,rgba(18,41,70,.92),rgba(9,26,47,.94));
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:25px;
+  margin-bottom:22px;
+  box-shadow:var(--shadow);
+}
+
+.card-title{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:20px;
+}
+
+.number{
+  width:34px;
+  height:34px;
+  display:grid;
+  place-items:center;
+  border-radius:10px;
+  background:rgba(244,197,66,.12);
+  border:1px solid rgba(244,197,66,.3);
+  color:var(--gold);
+  font-weight:bold;
+}
+
+.card-title h2{
+  font-size:20px;
+}
+
+/* FORM */
+.form-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:16px;
+}
+
+.field{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+}
+
+.field.full{
+  grid-column:1/-1;
+}
+
+label{
+  font-size:13px;
+  color:#c8d3e2;
+  font-weight:bold;
+}
+
+input,select,textarea{
+  width:100%;
+  background:#08182b;
+  color:var(--text);
+  border:1px solid var(--line);
+  border-radius:11px;
+  padding:13px 14px;
+  outline:none;
+  font-size:14px;
+  transition:.2s;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+  border-color:rgba(244,197,66,.7);
+  box-shadow:0 0 0 3px rgba(244,197,66,.08);
+}
+
+textarea{
+  resize:vertical;
+  min-height:90px;
+}
+
+/* BUTTONS */
+.actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:20px;
+}
+
+button{
+  border:0;
+  border-radius:11px;
+  padding:12px 18px;
+  font-weight:bold;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.btn-primary{
+  background:var(--gold);
+  color:#101820;
+}
+
+.btn-primary:hover{
+  background:var(--gold2);
+  transform:translateY(-2px);
+}
+
+.btn-secondary{
+  background:#193452;
+  color:white;
+  border:1px solid var(--line);
+}
+
+.btn-secondary:hover{
+  background:#244667;
+}
+
+.btn-danger{
+  background:rgba(255,92,103,.12);
+  color:#ff7d86;
+  border:1px solid rgba(255,92,103,.2);
+}
+
+.btn-danger:hover{
+  background:rgba(255,92,103,.22);
+}
+
+/* TABELA */
+.table-wrap{
+  overflow-x:auto;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:850px;
+}
+
+th{
+  text-align:left;
+  color:var(--muted);
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:.6px;
+  padding:13px;
+  border-bottom:1px solid var(--line);
+}
+
+td{
+  padding:13px;
+  border-bottom:1px solid rgba(255,255,255,.06);
+  font-size:14px;
+  vertical-align:middle;
+}
+
+td select{
+  min-width:130px;
+  padding:9px;
+}
+
+.empty{
+  text-align:center;
+  color:var(--muted);
+  padding:35px;
+}
+
+/* BADGES */
+.badge{
+  display:inline-flex;
+  align-items:center;
+  padding:6px 9px;
+  border-radius:20px;
+  font-size:11px;
+  font-weight:bold;
+}
+
+.high{
+  background:rgba(255,92,103,.13);
+  color:#ff8088;
+}
+
+.medium{
+  background:rgba(255,173,66,.13);
+  color:#ffc46f;
+}
+
+.low{
+  background:rgba(53,208,127,.13);
+  color:#67dfa0;
+}
+
+/* MATRIZ */
+.matrix-intro{
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.5;
+  margin-bottom:20px;
+}
+
+.matrix{
+  display:grid;
+  grid-template-columns:70px 1fr;
+  grid-template-rows:1fr 70px;
+  height:520px;
+  max-width:850px;
+  margin:auto;
+}
+
+.y-axis{
+  grid-column:1;
+  grid-row:1;
+  writing-mode:vertical-rl;
+  transform:rotate(180deg);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  color:var(--muted);
+  font-weight:bold;
+  font-size:13px;
+}
+
+.x-axis{
+  grid-column:2;
+  grid-row:2;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  color:var(--muted);
+  font-weight:bold;
+  font-size:13px;
+}
+
+.grid-matrix{
+  grid-column:2;
+  grid-row:1;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  grid-template-rows:1fr 1fr;
+  border:1px solid var(--line);
+}
+
+.quadrant{
+  position:relative;
+  padding:18px;
+  border:1px solid rgba(255,255,255,.08);
+  overflow:auto;
+}
+
+.quadrant strong{
+  display:block;
+  font-size:14px;
+  margin-bottom:8px;
+}
+
+.quadrant small{
+  color:var(--muted);
+  line-height:1.4;
+}
+
+.q1{
+  background:rgba(53,208,127,.08);
+}
+
+.q2{
+  background:rgba(244,197,66,.08);
+}
+
+.q3{
+  background:rgba(22,119,255,.07);
+}
+
+.q4{
+  background:rgba(255,92,103,.08);
+}
+
+.stake-dot{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  margin:5px 4px 0 0;
+  padding:6px 9px;
+  border-radius:8px;
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.08);
+  font-size:11px;
+}
+
+.dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--gold);
+}
+
+/* LEGEND */
+.legend{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+  margin-top:22px;
+}
+
+.legend-item{
+  padding:15px;
+  border-radius:12px;
+  background:rgba(255,255,255,.035);
+  border:1px solid var(--line);
+}
+
+.legend-item strong{
+  display:block;
+  margin-bottom:5px;
+}
+
+.legend-item span{
+  color:var(--muted);
+  font-size:13px;
+}
+
+/* FOOTER */
+footer{
+  text-align:center;
+  color:var(--muted);
+  font-size:12px;
+  padding:20px;
+}
+
+/* PRINT */
+@media print{
+  body{
+    background:white;
+    color:#111;
+  }
+
+  body::before,
+  header,
+  .actions,
+  .hero .tag{
+    display:none!important;
+  }
+
+  main{
+    width:100%;
+    margin:0;
+  }
+
+  .card{
+    box-shadow:none;
+    border:1px solid #ccc;
+    background:white;
+    color:#111;
+    break-inside:avoid;
+  }
+
+  input,select,textarea{
+    color:#111;
+    background:white;
+    border:1px solid #aaa;
+  }
+
+  .matrix{
+    height:450px;
+  }
+
+  footer{
+    color:#555;
+  }
+}
+
+/* MOBILE */
+@media(max-width:700px){
+  header{
+    padding:20px;
+  }
+
+  main{
+    width:94%;
+    margin-top:30px;
+  }
+
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+
+  .field.full{
+    grid-column:auto;
+  }
+
+  .legend{
+    grid-template-columns:1fr;
+  }
+
+  .matrix{
+    grid-template-columns:40px 1fr;
+    height:460px;
+  }
+
+  .card{
+    padding:18px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">
+    ENGENHARIA <span>DE PRODUÇÃO</span>
+  </div>
+
+  <a href="gerenciamento-projetos.html" class="back">
+    ← Voltar para Gerenciamento de Projetos
+  </a>
+</header>
+
+<main>
+
+<section class="hero">
+  <span class="tag">FERRAMENTA DE PROJETOS</span>
+
+  <h1>Matriz de Stakeholders</h1>
+
+  <p>
+    Identifique as pessoas, grupos e organizações que podem influenciar
+    ou ser impactados pelo projeto. Depois classifique cada stakeholder
+    por <strong>poder</strong> e <strong>interesse</strong>.
+  </p>
+</section>
+
+
+<!-- CADASTRO -->
+<section class="card">
+
+  <div class="card-title">
+    <div class="number">01</div>
+    <h2>Cadastrar Stakeholder</h2>
+  </div>
+
+  <div class="form-grid">
+
+    <div class="field">
+      <label>Nome / Grupo</label>
+      <input id="nome" placeholder="Ex.: Professor orientador">
+    </div>
+
+    <div class="field">
+      <label>Tipo</label>
+
+      <select id="tipo">
+        <option>Interno</option>
+        <option>Externo</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Poder / Influência</label>
+
+      <select id="poder">
+        <option value="baixo">Baixo</option>
+        <option value="medio">Médio</option>
+        <option value="alto">Alto</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Interesse no Projeto</label>
+
+      <select id="interesse">
+        <option value="baixo">Baixo</option>
+        <option value="medio">Médio</option>
+        <option value="alto">Alto</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Nível atual de engajamento</label>
+
+      <select id="engajamento">
+        <option>Desconhecedor</option>
+        <option>Resistente</option>
+        <option>Neutro</option>
+        <option>Favorável</option>
+        <option>Engajado</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Estratégia de relacionamento</label>
+
+      <select id="estrategia">
+        <option>Gerenciar de perto</option>
+        <option>Manter satisfeito</option>
+        <option>Manter informado</option>
+        <option>Monitorar</option>
+      </select>
+    </div>
+
+    <div class="field full">
+      <label>Observações</label>
+
+      <textarea
+        id="observacoes"
+        placeholder="Ex.: Precisa receber atualizações semanais..."
+      ></textarea>
+    </div>
+
+  </div>
+
+  <div class="actions">
+    <button class="btn-primary" onclick="adicionarStakeholder()">
+      + Adicionar Stakeholder
+    </button>
+
+    <button class="btn-secondary" onclick="limparFormulario()">
+      Limpar campos
+    </button>
+  </div>
+
+</section>
+
+
+<!-- LISTA -->
+<section class="card">
+
+  <div class="card-title">
+    <div class="number">02</div>
+    <h2>Stakeholders cadastrados</h2>
+  </div>
+
+  <div class="table-wrap">
+
+    <table>
+
+      <thead>
+        <tr>
+          <th>Stakeholder</th>
+          <th>Tipo</th>
+          <th>Poder</th>
+          <th>Interesse</th>
+          <th>Engajamento</th>
+          <th>Estratégia</th>
+          <th>Ação</th>
+        </tr>
+      </thead>
+
+      <tbody id="tabela"></tbody>
+
+    </table>
+
+  </div>
+
+</section>
+
+
+<!-- MATRIZ -->
+<section class="card">
+
+  <div class="card-title">
+    <div class="number">03</div>
+    <h2>Matriz Poder × Interesse</h2>
+  </div>
+
+  <p class="matrix-intro">
+    A matriz ajuda o gerente do projeto a decidir quanto esforço deve
+    dedicar a cada stakeholder.
+  </p>
+
+  <div class="matrix">
+
+    <div class="y-axis">
+      PODER / INFLUÊNCIA
+    </div>
+
+    <div class="grid-matrix">
+
+      <!-- ALTO PODER / ALTO INTERESSE -->
+      <div class="quadrant q1">
+        <strong>GERENCIAR DE PERTO</strong>
+
+        <small>
+          Alto poder + alto interesse.
+          São stakeholders prioritários.
+        </small>
+
+        <div id="q1"></div>
+      </div>
+
+
+      <!-- BAIXO PODER / ALTO INTERESSE -->
+      <div class="quadrant q2">
+        <strong>MANTER INFORMADO</strong>
+
+        <small>
+          Baixo poder + alto interesse.
+          Mantenha comunicação frequente.
+        </small>
+
+        <div id="q2"></div>
+      </div>
+
+
+      <!-- ALTO PODER / BAIXO INTERESSE -->
+      <div class="quadrant q3">
+        <strong>MANTER SATISFEITO</strong>
+
+        <small>
+          Alto poder + baixo interesse.
+          Evite que se tornem resistentes.
+        </small>
+
+        <div id="q3"></div>
+      </div>
+
+
+      <!-- BAIXO PODER / BAIXO INTERESSE -->
+      <div class="quadrant q4">
+        <strong>MONITORAR</strong>
+
+        <small>
+          Baixo poder + baixo interesse.
+          Acompanhe sem gastar muitos recursos.
+        </small>
+
+        <div id="q4"></div>
+      </div>
+
+    </div>
+
+    <div class="x-axis">
+      INTERESSE
+    </div>
+
+  </div>
+
+
+  <div class="legend">
+
+    <div class="legend-item">
+      <strong>🟢 Gerenciar de perto</strong>
+      <span>
+        Comunicação frequente e participação nas principais decisões.
+      </span>
+    </div>
+
+    <div class="legend-item">
+      <strong>🟡 Manter satisfeito</strong>
+      <span>
+        Mantenha informado sobre assuntos importantes e evite problemas.
+      </span>
+    </div>
+
+    <div class="legend-item">
+      <strong>🔵 Manter informado</strong>
+      <span>
+        Compartilhe informações e mantenha o interesse ativo.
+      </span>
+    </div>
+
+    <div class="legend-item">
+      <strong>🔴 Monitorar</strong>
+      <span>
+        Acompanhe de forma simples e intervenha quando necessário.
+      </span>
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- AÇÕES -->
+<section class="card">
+
+  <div class="card-title">
+    <div class="number">04</div>
+    <h2>Salvar projeto</h2>
+  </div>
+
+  <p class="matrix-intro">
+    Seus stakeholders são salvos automaticamente neste navegador.
+    Você também pode imprimir a matriz ou gerar um PDF pelo navegador.
+  </p>
+
+  <div class="actions">
+
+    <button class="btn-primary" onclick="salvarManual()">
+      💾 Salvar agora
+    </button>
+
+    <button class="btn-secondary" onclick="window.print()">
+      🖨 Imprimir / PDF
+    </button>
+
+    <button class="btn-danger" onclick="apagarTudo()">
+      🗑 Apagar tudo
+    </button>
+
+  </div>
+
+</section>
+
+</main>
+
+<footer>
+  Engenharia de Produção • Gerenciamento de Projetos
+</footer>
+
+
+<script>
+
+let stakeholders =
+  JSON.parse(localStorage.getItem("stakeholders_data")) || [];
+
+
+/* ADICIONAR */
+
+function adicionarStakeholder(){
+
+  const nome =
+    document.getElementById("nome").value.trim();
+
+  if(!nome){
+    alert("Digite o nome do stakeholder.");
+    return;
+  }
+
+  const stakeholder = {
+
+    id:Date.now(),
+
+    nome:nome,
+
+    tipo:
+      document.getElementById("tipo").value,
+
+    poder:
+      document.getElementById("poder").value,
+
+    interesse:
+      document.getElementById("interesse").value,
+
+    engajamento:
+      document.getElementById("engajamento").value,
+
+    estrategia:
+      document.getElementById("estrategia").value,
+
+    observacoes:
+      document.getElementById("observacoes").value
+
+  };
+
+  stakeholders.push(stakeholder);
+
+  salvar();
+
+  limparFormulario();
+
+  renderizar();
+
+}
+
+
+/* RENDERIZAR */
+
+function renderizar(){
+
+  const tabela =
+    document.getElementById("tabela");
+
+  tabela.innerHTML = "";
+
+  if(stakeholders.length === 0){
+
+    tabela.innerHTML = `
+      <tr>
+        <td colspan="7" class="empty">
+          Nenhum stakeholder cadastrado ainda.
+        </td>
+      </tr>
+    `;
+
+  }else{
+
+    stakeholders.forEach((s,index)=>{
+
+      tabela.innerHTML += `
+
+        <tr>
+
+          <td>
+            <strong>${escapar(s.nome)}</strong>
+          </td>
+
+          <td>
+            ${s.tipo}
+          </td>
+
+          <td>
+            <span class="badge ${classeNivel(s.poder)}">
+              ${textoNivel(s.poder)}
+            </span>
+          </td>
+
+          <td>
+            <span class="badge ${classeNivel(s.interesse)}">
+              ${textoNivel(s.interesse)}
+            </span>
+          </td>
+
+          <td>
+
+            <select
+              onchange="alterarCampo(${index},'engajamento',this.value)"
+            >
+
+              <option ${s.engajamento==="Desconhecedor"?"selected":""}>
+                Desconhecedor
+              </option>
+
+              <option ${s.engajamento==="Resistente"?"selected":""}>
+                Resistente
+              </option>
+
+              <option ${s.engajamento==="Neutro"?"selected":""}>
+                Neutro
+              </option>
+
+              <option ${s.engajamento==="Favorável"?"selected":""}>
+                Favorável
+              </option>
+
+              <option ${s.engajamento==="Engajado"?"selected":""}>
+                Engajado
+              </option>
+
+            </select>
+
+          </td>
+
+          <td>
+
+            <select
+              onchange="alterarCampo(${index},'estrategia',this.value)"
+            >
+
+              <option ${s.estrategia==="Gerenciar de perto"?"selected":""}>
+                Gerenciar de perto
+              </option>
+
+              <option ${s.estrategia==="Manter satisfeito"?"selected":""}>
+                Manter satisfeito
+              </option>
+
+              <option ${s.estrategia==="Manter informado"?"selected":""}>
+                Manter informado
+              </option>
+
+              <option ${s.estrategia==="Monitorar"?"selected":""}>
+                Monitorar
+              </option>
+
+            </select>
+
+          </td>
+
+          <td>
+
+            <button
+              class="btn-danger"
+              onclick="remover(${index})"
+            >
+              Excluir
+            </button>
+
+          </td>
+
+        </tr>
+
+      `;
+
+    });
+
+  }
+
+  renderizarMatriz();
+
+}
+
+
+/* MATRIZ */
+
+function renderizarMatriz(){
+
+  document.getElementById("q1").innerHTML="";
+  document.getElementById("q2").innerHTML="";
+  document.getElementById("q3").innerHTML="";
+  document.getElementById("q4").innerHTML="";
+
+  stakeholders.forEach(s=>{
+
+    let destino;
+
+    if(s.poder==="alto" && s.interesse==="alto"){
+      destino="q1";
+    }
+
+    else if(s.poder==="baixo" && s.interesse==="alto"){
+      destino="q2";
+    }
+
+    else if(s.poder==="alto" && s.interesse==="baixo"){
+      destino="q3";
+    }
+
+    else{
+      destino="q4";
+    }
+
+    /* Médio é tratado como intermediário */
+    if(s.poder==="medio" && s.interesse==="alto"){
+      destino="q1";
+    }
+
+    if(s.poder==="medio" && s.interesse==="medio"){
+      destino="q4";
+    }
+
+    if(s.poder==="alto" && s.interesse==="medio"){
+      destino="q3";
+    }
+
+    if(s.poder==="medio" && s.interesse==="baixo"){
+      destino="q4";
+    }
+
+    if(s.poder==="baixo" && s.interesse==="medio"){
+      destino="q2";
+    }
+
+    document.getElementById(destino).innerHTML += `
+
+      <span class="stake-dot">
+        <span class="dot"></span>
+        ${escapar(s.nome)}
+      </span>
+
+    `;
+
+  });
+
+}
+
+
+/* ALTERAR */
+
+function alterarCampo(index,campo,valor){
+
+  stakeholders[index][campo]=valor;
+
+  salvar();
+
+  renderizar();
+
+}
+
+
+/* REMOVER */
+
+function remover(index){
+
+  if(confirm("Deseja excluir este stakeholder?")){
+
+    stakeholders.splice(index,1);
+
+    salvar();
+
+    renderizar();
+
+  }
+
+}
+
+
+/* LIMPAR FORMULÁRIO */
+
+function limparFormulario(){
+
+  document.getElementById("nome").value="";
+  document.getElementById("tipo").value="Interno";
+  document.getElementById("poder").value="baixo";
+  document.getElementById("interesse").value="baixo";
+  document.getElementById("engajamento").value="Desconhecedor";
+  document.getElementById("estrategia").value="Gerenciar de perto";
+  document.getElementById("observacoes").value="";
+
+}
+
+
+/* SALVAR */
+
+function salvar(){
+
+  localStorage.setItem(
+    "stakeholders_data",
+    JSON.stringify(stakeholders)
+  );
+
+}
+
+
+/* SALVAR MANUAL */
+
+function salvarManual(){
+
+  salvar();
+
+  alert("Stakeholders salvos com sucesso!");
+
+}
+
+
+/* APAGAR TUDO */
+
+function apagarTudo(){
+
+  if(!stakeholders.length){
+
+    alert("Não há dados para apagar.");
+
+    return;
+
+  }
+
+  if(confirm("Tem certeza que deseja apagar todos os stakeholders?")){
+
+    stakeholders=[];
+
+    salvar();
+
+    renderizar();
+
+  }
+
+}
+
+
+/* TEXTOS */
+
+function textoNivel(valor){
+
+  if(valor==="alto") return "Alto";
+  if(valor==="medio") return "Médio";
+
+  return "Baixo";
+
+}
+
+
+function classeNivel(valor){
+
+  if(valor==="alto") return "high";
+  if(valor==="medio") return "medium";
+
+  return "low";
+
+}
+
+
+/* SEGURANÇA */
+
+function escapar(texto){
+
+  return String(texto)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
+}
+
+
+/* INICIAR */
+
+renderizar();
+
+</script>
+
+</body>
+</html>

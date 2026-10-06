@@ -1,0 +1,1804 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Gantt - Engenharia de Produção</title>
+
+<style>
+:root{
+  --bg:#06101f;
+  --bg2:#0a1830;
+  --card:#0e2038;
+  --line:rgba(255,255,255,.10);
+  --text:#f4f7fb;
+  --muted:#91a3ba;
+  --gold:#f4c542;
+  --gold2:#ffd95a;
+  --blue:#1677ff;
+  --green:#35d07f;
+  --orange:#ffad42;
+  --red:#ff5c67;
+  --shadow:0 20px 50px rgba(0,0,0,.35);
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  font-family:Arial,Helvetica,sans-serif;
+  color:var(--text);
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 10% 10%,rgba(22,119,255,.15),transparent 28%),
+    radial-gradient(circle at 90% 80%,rgba(244,197,66,.08),transparent 30%),
+    linear-gradient(135deg,var(--bg),var(--bg2));
+}
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  opacity:.07;
+  background-image:
+    linear-gradient(rgba(255,255,255,.3) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.3) 1px,transparent 1px);
+  background-size:40px 40px;
+}
+
+header{
+  padding:24px 7%;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  position:relative;
+  z-index:2;
+  background:rgba(6,16,31,.78);
+  backdrop-filter:blur(12px);
+}
+
+.logo{
+  font-weight:900;
+  letter-spacing:1px;
+}
+
+.logo span{
+  color:var(--gold);
+}
+
+.back{
+  color:var(--muted);
+  text-decoration:none;
+  font-size:14px;
+}
+
+.back:hover{
+  color:var(--gold);
+}
+
+main{
+  width:min(1250px,94%);
+  margin:45px auto 70px;
+  position:relative;
+  z-index:1;
+}
+
+.hero{
+  margin-bottom:30px;
+}
+
+.tag{
+  color:var(--gold);
+  font-size:12px;
+  font-weight:bold;
+  letter-spacing:2px;
+}
+
+h1{
+  font-size:clamp(32px,5vw,52px);
+  margin:10px 0 14px;
+}
+
+.hero p{
+  max-width:820px;
+  color:var(--muted);
+  line-height:1.6;
+}
+
+.card{
+  background:linear-gradient(145deg,rgba(18,41,70,.92),rgba(9,26,47,.94));
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:25px;
+  margin-bottom:22px;
+  box-shadow:var(--shadow);
+}
+
+.card-title{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:20px;
+}
+
+.number{
+  width:34px;
+  height:34px;
+  display:grid;
+  place-items:center;
+  border-radius:10px;
+  background:rgba(244,197,66,.12);
+  border:1px solid rgba(244,197,66,.3);
+  color:var(--gold);
+  font-weight:bold;
+}
+
+.card-title h2{
+  font-size:20px;
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:16px;
+}
+
+.field{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+}
+
+.field.full{
+  grid-column:1/-1;
+}
+
+label{
+  font-size:13px;
+  color:#c8d3e2;
+  font-weight:bold;
+}
+
+input,select{
+  width:100%;
+  background:#08182b;
+  color:var(--text);
+  border:1px solid var(--line);
+  border-radius:11px;
+  padding:13px 14px;
+  outline:none;
+  font-size:14px;
+}
+
+input:focus,
+select:focus{
+  border-color:rgba(244,197,66,.7);
+  box-shadow:0 0 0 3px rgba(244,197,66,.08);
+}
+
+.actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:20px;
+}
+
+button{
+  border:0;
+  border-radius:11px;
+  padding:12px 18px;
+  font-weight:bold;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.btn-primary{
+  background:var(--gold);
+  color:#101820;
+}
+
+.btn-primary:hover{
+  background:var(--gold2);
+  transform:translateY(-2px);
+}
+
+.btn-secondary{
+  background:#193452;
+  color:white;
+  border:1px solid var(--line);
+}
+
+.btn-secondary:hover{
+  background:#244667;
+}
+
+.btn-danger{
+  background:rgba(255,92,103,.12);
+  color:#ff7d86;
+  border:1px solid rgba(255,92,103,.2);
+}
+
+.btn-danger:hover{
+  background:rgba(255,92,103,.22);
+}
+
+/* TABELA DE ATIVIDADES */
+
+.table-wrap{
+  overflow-x:auto;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:950px;
+}
+
+th{
+  padding:13px 10px;
+  text-align:left;
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.7px;
+  color:var(--muted);
+  border-bottom:1px solid var(--line);
+}
+
+td{
+  padding:10px;
+  border-bottom:1px solid rgba(255,255,255,.06);
+  vertical-align:middle;
+}
+
+td input,
+td select{
+  padding:9px 10px;
+  font-size:12px;
+}
+
+.activity-name{
+  min-width:180px;
+}
+
+.progress-input{
+  width:80px!important;
+}
+
+/* GANTT */
+
+.gantt-container{
+  overflow:auto;
+  border:1px solid var(--line);
+  border-radius:15px;
+  background:#08182b;
+}
+
+.gantt{
+  min-width:1000px;
+}
+
+.gantt-header{
+  display:grid;
+  grid-template-columns:270px 1fr;
+  position:sticky;
+  top:0;
+  z-index:4;
+  background:#0b1c32;
+  border-bottom:1px solid var(--line);
+}
+
+.task-header{
+  padding:15px;
+  font-size:12px;
+  font-weight:bold;
+  color:var(--muted);
+  border-right:1px solid var(--line);
+}
+
+.timeline-header{
+  position:relative;
+  height:55px;
+}
+
+.month{
+  position:absolute;
+  top:0;
+  height:28px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-right:1px solid var(--line);
+  color:var(--gold);
+  font-size:11px;
+  font-weight:bold;
+}
+
+.days{
+  position:absolute;
+  bottom:0;
+  left:0;
+  right:0;
+  height:27px;
+  display:flex;
+}
+
+.day{
+  flex:1;
+  min-width:34px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-right:1px solid rgba(255,255,255,.045);
+  color:var(--muted);
+  font-size:9px;
+}
+
+.gantt-row{
+  display:grid;
+  grid-template-columns:270px 1fr;
+  min-height:58px;
+  border-bottom:1px solid rgba(255,255,255,.055);
+}
+
+.task-info{
+  padding:10px 14px;
+  border-right:1px solid var(--line);
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+
+.task-info strong{
+  font-size:13px;
+}
+
+.task-info small{
+  color:var(--muted);
+  font-size:10px;
+  margin-top:4px;
+}
+
+.timeline{
+  position:relative;
+  min-height:58px;
+  background-image:
+    linear-gradient(
+      90deg,
+      rgba(255,255,255,.045) 1px,
+      transparent 1px
+    );
+  background-size:34px 100%;
+}
+
+.today-line{
+  position:absolute;
+  top:0;
+  bottom:0;
+  width:2px;
+  background:var(--red);
+  z-index:2;
+  box-shadow:0 0 10px rgba(255,92,103,.5);
+}
+
+.bar{
+  position:absolute;
+  top:16px;
+  height:27px;
+  border-radius:7px;
+  background:linear-gradient(
+    90deg,
+    #176cff,
+    #3d91ff
+  );
+  box-shadow:0 5px 15px rgba(22,119,255,.25);
+  overflow:hidden;
+  min-width:10px;
+}
+
+.bar-progress{
+  position:absolute;
+  left:0;
+  top:0;
+  bottom:0;
+  background:rgba(53,208,127,.75);
+}
+
+.bar-text{
+  position:relative;
+  z-index:1;
+  font-size:10px;
+  font-weight:bold;
+  padding:0 8px;
+  line-height:27px;
+  white-space:nowrap;
+}
+
+/* STATUS */
+
+.status{
+  display:inline-flex;
+  padding:5px 8px;
+  border-radius:20px;
+  font-size:10px;
+  font-weight:bold;
+}
+
+.planejamento{
+  color:#75adff;
+  background:rgba(22,119,255,.12);
+}
+
+.andamento{
+  color:#67dfa0;
+  background:rgba(53,208,127,.12);
+}
+
+.concluido{
+  color:var(--gold);
+  background:rgba(244,197,66,.12);
+}
+
+.atrasado{
+  color:#ff7d86;
+  background:rgba(255,92,103,.12);
+}
+
+.empty{
+  text-align:center;
+  color:var(--muted);
+  padding:40px 20px;
+}
+
+/* STATS */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+}
+
+.stat{
+  padding:18px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:rgba(255,255,255,.035);
+}
+
+.stat span{
+  display:block;
+  color:var(--muted);
+  font-size:11px;
+  margin-bottom:7px;
+}
+
+.stat strong{
+  font-size:24px;
+}
+
+/* DICA */
+
+.tip{
+  margin-top:18px;
+  padding:15px;
+  border-left:3px solid var(--gold);
+  border-radius:10px;
+  background:rgba(244,197,66,.06);
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.5;
+}
+
+.tip strong{
+  color:var(--gold);
+}
+
+/* MOBILE */
+
+@media(max-width:800px){
+
+  header{
+    padding:20px;
+  }
+
+  main{
+    width:94%;
+    margin-top:30px;
+  }
+
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+
+  .field.full{
+    grid-column:auto;
+  }
+
+  .stats{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+}
+
+/* PRINT */
+
+@media print{
+
+  body{
+    background:white;
+    color:#111;
+  }
+
+  body::before,
+  header,
+  .hero .tag,
+  .form-card,
+  .actions{
+    display:none!important;
+  }
+
+  main{
+    width:100%;
+    margin:0;
+  }
+
+  .card{
+    box-shadow:none;
+    background:white;
+    border:1px solid #ccc;
+    color:#111;
+  }
+
+  .gantt-container{
+    overflow:visible;
+    background:white;
+  }
+
+  .gantt{
+    min-width:0;
+  }
+
+  .gantt-header,
+  .gantt-row{
+    grid-template-columns:210px 1fr;
+  }
+
+  .task-header,
+  .task-info{
+    color:#111;
+  }
+
+  .timeline{
+    background-image:
+      linear-gradient(
+        90deg,
+        #ddd 1px,
+        transparent 1px
+      );
+  }
+
+  .task-info small,
+  .day{
+    color:#555;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+  <div class="logo">
+    ENGENHARIA <span>DE PRODUÇÃO</span>
+  </div>
+
+  <a href="gerenciamento-projetos.html" class="back">
+    ← Voltar para Gerenciamento de Projetos
+  </a>
+
+</header>
+
+
+<main>
+
+<section class="hero">
+
+  <span class="tag">FERRAMENTA DE PROJETOS</span>
+
+  <h1>Gráfico de Gantt</h1>
+
+  <p>
+    Transforme o planejamento do projeto em um
+    <strong>cronograma visual</strong>.
+    Cadastre as atividades, defina datas, responsáveis e progresso
+    e acompanhe o projeto em uma linha do tempo.
+  </p>
+
+</section>
+
+
+<!-- CONFIGURAÇÃO -->
+
+<section class="card form-card">
+
+  <div class="card-title">
+    <div class="number">01</div>
+    <h2>Configuração do projeto</h2>
+  </div>
+
+  <div class="form-grid">
+
+    <div class="field">
+      <label>Nome do projeto</label>
+
+      <input
+        id="projectName"
+        placeholder="Ex.: Implantação de nova linha"
+      >
+    </div>
+
+    <div class="field">
+      <label>Data inicial do cronograma</label>
+
+      <input
+        type="date"
+        id="projectStart"
+      >
+    </div>
+
+  </div>
+
+  <div class="actions">
+
+    <button
+      class="btn-primary"
+      onclick="salvarConfiguracao()"
+    >
+      💾 Salvar configuração
+    </button>
+
+  </div>
+
+</section>
+
+
+<!-- ATIVIDADE -->
+
+<section class="card form-card">
+
+  <div class="card-title">
+    <div class="number">02</div>
+    <h2>Adicionar atividade</h2>
+  </div>
+
+  <div class="form-grid">
+
+    <div class="field">
+      <label>Nome da atividade</label>
+
+      <input
+        id="activityName"
+        placeholder="Ex.: Elaborar projeto do processo"
+      >
+    </div>
+
+    <div class="field">
+      <label>Responsável</label>
+
+      <input
+        id="activityResponsible"
+        placeholder="Ex.: João"
+      >
+    </div>
+
+    <div class="field">
+      <label>Data de início</label>
+
+      <input
+        type="date"
+        id="activityStart"
+      >
+    </div>
+
+    <div class="field">
+      <label>Data de término</label>
+
+      <input
+        type="date"
+        id="activityEnd"
+      >
+    </div>
+
+    <div class="field">
+      <label>Dependência</label>
+
+      <select id="activityDependency">
+        <option value="">Nenhuma</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Progresso (%)</label>
+
+      <input
+        type="number"
+        id="activityProgress"
+        min="0"
+        max="100"
+        value="0"
+      >
+    </div>
+
+    <div class="field">
+      <label>Status</label>
+
+      <select id="activityStatus">
+        <option value="Planejamento">Planejamento</option>
+        <option value="Em andamento">Em andamento</option>
+        <option value="Concluído">Concluído</option>
+        <option value="Atrasado">Atrasado</option>
+      </select>
+    </div>
+
+  </div>
+
+  <div class="actions">
+
+    <button
+      class="btn-primary"
+      onclick="adicionarAtividade()"
+    >
+      + Adicionar atividade
+    </button>
+
+  </div>
+
+  <div class="tip">
+    <strong>💡 Dica:</strong>
+    use as atividades da sua EAP como base para montar o cronograma.
+    A EAP responde <strong>o que será entregue</strong>;
+    o Gantt mostra <strong>quando será feito</strong>.
+  </div>
+
+</section>
+
+
+<!-- INDICADORES -->
+
+<section class="card">
+
+  <div class="card-title">
+    <div class="number">03</div>
+    <h2>Resumo do projeto</h2>
+  </div>
+
+  <div class="stats">
+
+    <div class="stat">
+      <span>ATIVIDADES</span>
+      <strong id="statTotal">0</strong>
+    </div>
+
+    <div class="stat">
+      <span>CONCLUÍDAS</span>
+      <strong id="statConcluidas">0</strong>
+    </div>
+
+    <div class="stat">
+      <span>EM ANDAMENTO</span>
+      <strong id="statAndamento">0</strong>
+    </div>
+
+    <div class="stat">
+      <span>PROGRESSO MÉDIO</span>
+      <strong id="statProgresso">0%</strong>
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- LISTA -->
+
+<section class="card">
+
+  <div class="card-title">
+    <div class="number">04</div>
+    <h2>Atividades do cronograma</h2>
+  </div>
+
+  <div class="table-wrap">
+
+    <table>
+
+      <thead>
+
+        <tr>
+          <th>Atividade</th>
+          <th>Responsável</th>
+          <th>Início</th>
+          <th>Término</th>
+          <th>Duração</th>
+          <th>Dependência</th>
+          <th>Progresso</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+
+      </thead>
+
+      <tbody id="activityTable"></tbody>
+
+    </table>
+
+  </div>
+
+</section>
+
+
+<!-- GANTT -->
+
+<section class="card">
+
+  <div class="card-title">
+    <div class="number">05</div>
+    <h2>Linha do tempo</h2>
+  </div>
+
+  <div class="gantt-container">
+
+    <div class="gantt">
+
+      <div class="gantt-header">
+
+        <div class="task-header">
+          ATIVIDADE
+        </div>
+
+        <div
+          class="timeline-header"
+          id="timelineHeader"
+        ></div>
+
+      </div>
+
+      <div id="ganttRows"></div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- AÇÕES -->
+
+<section class="card">
+
+  <div class="card-title">
+    <div class="number">06</div>
+    <h2>Salvar e exportar</h2>
+  </div>
+
+  <p style="color:var(--muted);font-size:14px;line-height:1.5;">
+    O cronograma é salvo automaticamente neste navegador.
+    Para entregar o trabalho, use a opção de impressão e escolha
+    <strong>Salvar como PDF</strong>.
+  </p>
+
+  <div class="actions">
+
+    <button
+      class="btn-primary"
+      onclick="salvarTudo()"
+    >
+      💾 Salvar agora
+    </button>
+
+    <button
+      class="btn-secondary"
+      onclick="window.print()"
+    >
+      🖨 Imprimir / PDF
+    </button>
+
+    <button
+      class="btn-danger"
+      onclick="apagarTudo()"
+    >
+      🗑 Apagar cronograma
+    </button>
+
+  </div>
+
+</section>
+
+</main>
+
+
+<script>
+
+let atividades =
+  JSON.parse(localStorage.getItem("gantt_atividades")) || [];
+
+let configuracao =
+  JSON.parse(localStorage.getItem("gantt_config")) || {
+
+    nome:"Meu Projeto",
+
+    inicio:""
+
+  };
+
+
+/* INICIAR */
+
+document.addEventListener("DOMContentLoaded",()=>{
+
+  document.getElementById("projectName").value =
+    configuracao.nome || "";
+
+  document.getElementById("projectStart").value =
+    configuracao.inicio || "";
+
+  if(!configuracao.inicio){
+
+    document.getElementById("projectStart").value =
+      hoje();
+
+  }
+
+  renderizar();
+
+});
+
+
+/* DATA ATUAL */
+
+function hoje(){
+
+  const d=new Date();
+
+  return d.toISOString().split("T")[0];
+
+}
+
+
+/* CONFIGURAÇÃO */
+
+function salvarConfiguracao(){
+
+  configuracao.nome =
+    document.getElementById("projectName")
+      .value.trim() || "Meu Projeto";
+
+  configuracao.inicio =
+    document.getElementById("projectStart")
+      .value || hoje();
+
+  salvar();
+
+  renderizar();
+
+  alert("Configuração salva!");
+
+}
+
+
+/* ADICIONAR ATIVIDADE */
+
+function adicionarAtividade(){
+
+  const nome =
+    document.getElementById("activityName")
+      .value.trim();
+
+  const responsavel =
+    document.getElementById("activityResponsible")
+      .value.trim();
+
+  const inicio =
+    document.getElementById("activityStart").value;
+
+  const fim =
+    document.getElementById("activityEnd").value;
+
+  const dependencia =
+    document.getElementById("activityDependency").value;
+
+  const progresso =
+    Number(
+      document.getElementById("activityProgress").value
+    ) || 0;
+
+  const status =
+    document.getElementById("activityStatus").value;
+
+
+  if(!nome){
+
+    alert("Digite o nome da atividade.");
+
+    return;
+
+  }
+
+  if(!inicio || !fim){
+
+    alert("Informe a data de início e término.");
+
+    return;
+
+  }
+
+  if(new Date(fim)<new Date(inicio)){
+
+    alert("A data de término não pode ser anterior ao início.");
+
+    return;
+
+  }
+
+
+  const atividade={
+
+    id:Date.now(),
+
+    nome,
+
+    responsavel,
+
+    inicio,
+
+    fim,
+
+    dependencia,
+
+    progresso:Math.min(100,Math.max(0,progresso)),
+
+    status
+
+  };
+
+
+  atividades.push(atividade);
+
+  salvar();
+
+  limparFormularioAtividade();
+
+  renderizar();
+
+}
+
+
+/* LIMPAR FORM */
+
+function limparFormularioAtividade(){
+
+  document.getElementById("activityName").value="";
+  document.getElementById("activityResponsible").value="";
+  document.getElementById("activityStart").value="";
+  document.getElementById("activityEnd").value="";
+  document.getElementById("activityDependency").value="";
+  document.getElementById("activityProgress").value=0;
+  document.getElementById("activityStatus").value="Planejamento";
+
+}
+
+
+/* RENDERIZAR */
+
+function renderizar(){
+
+  atualizarDependencias();
+
+  renderizarTabela();
+
+  renderizarGantt();
+
+  atualizarEstatisticas();
+
+}
+
+
+/* DEPENDÊNCIAS */
+
+function atualizarDependencias(){
+
+  const select =
+    document.getElementById("activityDependency");
+
+  const atual =
+    select.value;
+
+  select.innerHTML =
+    `<option value="">Nenhuma</option>`;
+
+  atividades.forEach(a=>{
+
+    const option =
+      document.createElement("option");
+
+    option.value=a.id;
+
+    option.textContent=a.nome;
+
+    select.appendChild(option);
+
+  });
+
+  if(
+    atividades.some(a=>String(a.id)===String(atual))
+  ){
+    select.value=atual;
+  }
+
+}
+
+
+/* TABELA */
+
+function renderizarTabela(){
+
+  const tbody =
+    document.getElementById("activityTable");
+
+  tbody.innerHTML="";
+
+  if(atividades.length===0){
+
+    tbody.innerHTML=`
+
+      <tr>
+        <td colspan="9" class="empty">
+          Nenhuma atividade cadastrada.
+        </td>
+      </tr>
+
+    `;
+
+    return;
+
+  }
+
+
+  atividades.forEach((a,index)=>{
+
+    const tr =
+      document.createElement("tr");
+
+    tr.innerHTML=`
+
+      <td>
+        <input
+          class="activity-name"
+          value="${escapar(a.nome)}"
+          onchange="editar(${index},'nome',this.value)"
+        >
+      </td>
+
+      <td>
+        <input
+          value="${escapar(a.responsavel)}"
+          onchange="editar(${index},'responsavel',this.value)"
+        >
+      </td>
+
+      <td>
+        <input
+          type="date"
+          value="${a.inicio}"
+          onchange="editar(${index},'inicio',this.value)"
+        >
+      </td>
+
+      <td>
+        <input
+          type="date"
+          value="${a.fim}"
+          onchange="editar(${index},'fim',this.value)"
+        >
+      </td>
+
+      <td>
+        <strong>
+          ${duracao(a.inicio,a.fim)}d
+        </strong>
+      </td>
+
+      <td>
+
+        <select
+          onchange="editar(${index},'dependencia',this.value)"
+        >
+
+          <option value="">
+            Nenhuma
+          </option>
+
+          ${
+            atividades
+            .filter(x=>x.id!==a.id)
+            .map(x=>`
+              <option
+                value="${x.id}"
+                ${String(a.dependencia)===String(x.id)?"selected":""}
+              >
+                ${escapar(x.nome)}
+              </option>
+            `)
+            .join("")
+          }
+
+        </select>
+
+      </td>
+
+      <td>
+
+        <input
+          class="progress-input"
+          type="number"
+          min="0"
+          max="100"
+          value="${a.progresso}"
+          onchange="editar(${index},'progresso',this.value)"
+        >
+
+      </td>
+
+      <td>
+
+        <select
+          onchange="editar(${index},'status',this.value)"
+        >
+
+          <option
+            ${a.status==="Planejamento"?"selected":""}
+          >
+            Planejamento
+          </option>
+
+          <option
+            ${a.status==="Em andamento"?"selected":""}
+          >
+            Em andamento
+          </option>
+
+          <option
+            ${a.status==="Concluído"?"selected":""}
+          >
+            Concluído
+          </option>
+
+          <option
+            ${a.status==="Atrasado"?"selected":""}
+          >
+            Atrasado
+          </option>
+
+        </select>
+
+      </td>
+
+      <td>
+
+        <button
+          class="btn-danger"
+          onclick="remover(${index})"
+        >
+          ×
+        </button>
+
+      </td>
+
+    `;
+
+    tbody.appendChild(tr);
+
+  });
+
+}
+
+
+/* EDITAR */
+
+function editar(index,campo,valor){
+
+  if(campo==="progresso"){
+
+    valor=Math.min(
+      100,
+      Math.max(0,Number(valor)||0)
+    );
+
+  }
+
+  atividades[index][campo]=valor;
+
+  salvar();
+
+  renderizar();
+
+}
+
+
+/* REMOVER */
+
+function remover(index){
+
+  if(!confirm(
+    `Excluir a atividade "${atividades[index].nome}"?`
+  )) return;
+
+  atividades.splice(index,1);
+
+  salvar();
+
+  renderizar();
+
+}
+
+
+/* DURAÇÃO */
+
+function duracao(inicio,fim){
+
+  const a=new Date(inicio+"T00:00:00");
+  const b=new Date(fim+"T00:00:00");
+
+  return Math.floor(
+    (b-a)/(1000*60*60*24)
+  )+1;
+
+}
+
+
+/* GANTT */
+
+function renderizarGantt(){
+
+  const header =
+    document.getElementById("timelineHeader");
+
+  const rows =
+    document.getElementById("ganttRows");
+
+  header.innerHTML="";
+  rows.innerHTML="";
+
+
+  if(atividades.length===0){
+
+    rows.innerHTML=`
+
+      <div class="empty">
+        Adicione atividades para visualizar o Gantt.
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  let menor =
+    new Date(
+      Math.min(
+        ...atividades.map(a=>
+          new Date(a.inicio+"T00:00:00")
+        )
+      )
+    );
+
+  let maior =
+    new Date(
+      Math.max(
+        ...atividades.map(a=>
+          new Date(a.fim+"T00:00:00")
+        )
+      )
+    );
+
+
+  /* adiciona margem */
+
+  menor.setDate(menor.getDate()-1);
+  maior.setDate(maior.getDate()+1);
+
+
+  const totalDias =
+    Math.floor(
+      (maior-menor)/(1000*60*60*24)
+    )+1;
+
+
+  /* CABEÇALHO DOS DIAS */
+
+  const days =
+    document.createElement("div");
+
+  days.className="days";
+
+
+  for(let i=0;i<totalDias;i++){
+
+    const d=new Date(menor);
+
+    d.setDate(d.getDate()+i);
+
+    const day=document.createElement("div");
+
+    day.className="day";
+
+    day.textContent=d.getDate();
+
+    days.appendChild(day);
+
+  }
+
+
+  header.appendChild(days);
+
+
+  /* MESES */
+
+  let mesAtual=null;
+  let inicioMes=0;
+
+  for(let i=0;i<=totalDias;i++){
+
+    const d=new Date(menor);
+
+    d.setDate(d.getDate()+i);
+
+    const chave =
+      d.getFullYear()+"-"+d.getMonth();
+
+
+    if(chave!==mesAtual){
+
+      if(mesAtual!==null){
+
+        criarMes(
+          header,
+          inicioMes,
+          i-inicioMes,
+          totalDias,
+          menor,
+          d
+        );
+
+      }
+
+      mesAtual=chave;
+      inicioMes=i;
+
+    }
+
+
+    if(i===totalDias){
+
+      criarMes(
+        header,
+        inicioMes,
+        i-inicioMes,
+        totalDias,
+        menor,
+        d
+      );
+
+    }
+
+  }
+
+
+  /* LINHAS */
+
+  atividades.forEach(a=>{
+
+    const row =
+      document.createElement("div");
+
+    row.className="gantt-row";
+
+
+    const info =
+      document.createElement("div");
+
+    info.className="task-info";
+
+    info.innerHTML=`
+
+      <strong>
+        ${escapar(a.nome)}
+      </strong>
+
+      <small>
+        ${escapar(a.responsavel || "Sem responsável")}
+        • ${duracao(a.inicio,a.fim)} dias
+      </small>
+
+    `;
+
+
+    const timeline =
+      document.createElement("div");
+
+    timeline.className="timeline";
+
+
+    const inicio =
+      new Date(a.inicio+"T00:00:00");
+
+    const fim =
+      new Date(a.fim+"T00:00:00");
+
+
+    const offset =
+      Math.floor(
+        (inicio-menor)/(1000*60*60*24)
+      );
+
+    const length =
+      duracao(a.inicio,a.fim);
+
+
+    const left =
+      (offset/totalDias)*100;
+
+    const width =
+      (length/totalDias)*100;
+
+
+    const bar =
+      document.createElement("div");
+
+    bar.className="bar";
+
+    bar.style.left=left+"%";
+    bar.style.width=width+"%";
+
+
+    const progress =
+      document.createElement("div");
+
+    progress.className="bar-progress";
+
+    progress.style.width=
+      Math.min(100,a.progresso)+"%";
+
+
+    const text =
+      document.createElement("div");
+
+    text.className="bar-text";
+
+    text.textContent=
+      a.progresso+"%";
+
+
+    bar.appendChild(progress);
+    bar.appendChild(text);
+
+    timeline.appendChild(bar);
+
+
+    /* linha de hoje */
+
+    const hojeDate =
+      new Date();
+
+    hojeDate.setHours(0,0,0,0);
+
+
+    if(
+      hojeDate>=menor &&
+      hojeDate<=maior
+    ){
+
+      const pos =
+        (
+          (hojeDate-menor) /
+          (1000*60*60*24)
+        ) /
+        totalDias * 100;
+
+
+      const linha =
+        document.createElement("div");
+
+      linha.className="today-line";
+
+      linha.style.left=pos+"%";
+
+      linha.title="Hoje";
+
+      timeline.appendChild(linha);
+
+    }
+
+
+    row.appendChild(info);
+    row.appendChild(timeline);
+
+    rows.appendChild(row);
+
+  });
+
+}
+
+
+/* MÊS */
+
+function criarMes(
+  header,
+  inicio,
+  quantidade,
+  totalDias,
+  menor,
+  data
+){
+
+  if(quantidade<=0) return;
+
+  const nomes=[
+    "JAN","FEV","MAR","ABR","MAI","JUN",
+    "JUL","AGO","SET","OUT","NOV","DEZ"
+  ];
+
+  const mes =
+    document.createElement("div");
+
+  mes.className="month";
+
+  mes.textContent =
+    nomes[data.getMonth()] +
+    " " +
+    data.getFullYear();
+
+
+  mes.style.left=
+    (inicio/totalDias)*100+"%";
+
+  mes.style.width=
+    (quantidade/totalDias)*100+"%";
+
+
+  header.appendChild(mes);
+
+}
+
+
+/* ESTATÍSTICAS */
+
+function atualizarEstatisticas(){
+
+  const total =
+    atividades.length;
+
+  const concluidas =
+    atividades.filter(
+      a=>a.status==="Concluído"
+    ).length;
+
+  const andamento =
+    atividades.filter(
+      a=>a.status==="Em andamento"
+    ).length;
+
+  const progresso =
+    total
+      ? Math.round(
+          atividades.reduce(
+            (s,a)=>s+Number(a.progresso||0),
+            0
+          )/total
+        )
+      : 0;
+
+
+  document.getElementById("statTotal")
+    .textContent=total;
+
+  document.getElementById("statConcluidas")
+    .textContent=concluidas;
+
+  document.getElementById("statAndamento")
+    .textContent=andamento;
+
+  document.getElementById("statProgresso")
+    .textContent=progresso+"%";
+
+}
+
+
+/* SALVAR */
+
+function salvar(){
+
+  localStorage.setItem(
+    "gantt_atividades",
+    JSON.stringify(atividades)
+  );
+
+  localStorage.setItem(
+    "gantt_config",
+    JSON.stringify(configuracao)
+  );
+
+}
+
+
+/* SALVAR TUDO */
+
+function salvarTudo(){
+
+  configuracao.nome =
+    document.getElementById("projectName")
+      .value.trim() || "Meu Projeto";
+
+  configuracao.inicio =
+    document.getElementById("projectStart").value;
+
+  salvar();
+
+  renderizar();
+
+  alert("Cronograma salvo com sucesso!");
+
+}
+
+
+/* APAGAR */
+
+function apagarTudo(){
+
+  if(atividades.length===0){
+
+    alert("O cronograma já está vazio.");
+
+    return;
+
+  }
+
+  if(!confirm(
+    "Tem certeza que deseja apagar todo o cronograma?"
+  )) return;
+
+  atividades=[];
+
+  salvar();
+
+  renderizar();
+
+}
+
+
+/* ESCAPAR HTML */
+
+function escapar(texto){
+
+  return String(texto)
+
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Engenharia de Produção</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    min-height:100vh;
+    overflow:hidden;
+    font-family:Arial, Helvetica, sans-serif;
+    color:white;
+
+    background:
+        radial-gradient(circle at 75% 20%, rgba(255,193,7,.12), transparent 25%),
+        linear-gradient(135deg,#07111f,#0c1d31,#102a43);
+}
+
+/* FUNDO */
+
+.background{
+    position:fixed;
+    inset:0;
+    overflow:hidden;
+}
+
+.grid{
+    position:absolute;
+    inset:0;
+
+    background-image:
+        linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,.05) 1px, transparent 1px);
+
+    background-size:45px 45px;
+    opacity:.25;
+}
+
+/* CÍRCULOS DECORATIVOS */
+
+.circle{
+    position:absolute;
+    border:1px solid rgba(255,193,7,.12);
+    border-radius:50%;
+}
+
+.circle1{
+    width:550px;
+    height:550px;
+    right:-220px;
+    top:-200px;
+}
+
+.circle2{
+    width:750px;
+    height:750px;
+    left:-450px;
+    bottom:-500px;
+}
+
+/* ENGRENAGEM */
+
+.gear{
+    position:absolute;
+    right:8%;
+    bottom:8%;
+
+    font-size:180px;
+
+    color:#ffc107;
+    opacity:.035;
+
+    animation:rotate 30s linear infinite;
+}
+
+@keyframes rotate{
+    from{
+        transform:rotate(0deg);
+    }
+
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+/* CONTEÚDO */
+
+.container{
+    position:relative;
+    z-index:2;
+
+    min-height:100vh;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    text-align:center;
+    padding:25px;
+}
+
+.content{
+    max-width:800px;
+}
+
+/* PEQUENO TÍTULO */
+
+.tag{
+    display:inline-block;
+
+    padding:9px 18px;
+
+    border:1px solid rgba(255,193,7,.35);
+    border-radius:30px;
+
+    color:#ffc107;
+
+    font-size:12px;
+    font-weight:bold;
+    letter-spacing:2px;
+
+    margin-bottom:25px;
+
+    background:rgba(255,193,7,.06);
+}
+
+/* TÍTULO */
+
+h1{
+    font-size:clamp(45px,7vw,82px);
+
+    line-height:.95;
+
+    letter-spacing:-3px;
+
+    margin-bottom:20px;
+}
+
+h1 span{
+    color:#ffc107;
+}
+
+/* FRASE */
+
+.subtitle{
+    color:#aebdce;
+
+    font-size:18px;
+
+    margin-bottom:40px;
+}
+
+/* BOTÃO */
+
+.button{
+    display:inline-flex;
+
+    align-items:center;
+    justify-content:center;
+
+    gap:14px;
+
+    padding:18px 35px;
+
+    background:#ffc107;
+
+    color:#111;
+
+    text-decoration:none;
+
+    font-size:18px;
+    font-weight:900;
+
+    border-radius:12px;
+
+    box-shadow:
+        0 10px 30px rgba(255,193,7,.18);
+
+    transition:.25s;
+}
+
+.button:hover{
+    transform:translateY(-4px);
+
+    background:#ffd54a;
+
+    box-shadow:
+        0 15px 40px rgba(255,193,7,.3);
+}
+
+.arrow{
+    font-size:23px;
+
+    transition:.25s;
+}
+
+.button:hover .arrow{
+    transform:translateX(6px);
+}
+
+/* LINHA INFERIOR */
+
+.line{
+    width:90px;
+    height:2px;
+
+    background:#ffc107;
+
+    margin:0 auto 25px;
+
+    opacity:.7;
+}
+
+/* RODAPÉ */
+
+.footer{
+    position:fixed;
+
+    bottom:20px;
+    left:0;
+
+    width:100%;
+
+    text-align:center;
+
+    color:#53677d;
+
+    font-size:11px;
+
+    letter-spacing:1px;
+}
+
+/* CELULAR */
+
+@media(max-width:600px){
+
+    h1{
+        font-size:48px;
+    }
+
+    .subtitle{
+        font-size:16px;
+    }
+
+    .button{
+        width:100%;
+        max-width:300px;
+    }
+
+    .gear{
+        font-size:120px;
+        right:-20px;
+        bottom:50px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="background">
+
+    <div class="grid"></div>
+
+    <div class="circle circle1"></div>
+    <div class="circle circle2"></div>
+
+    <div class="gear">⚙</div>
+
+</div>
+
+
+<div class="container">
+
+    <div class="content">
+
+        <div class="tag">
+            ENGENHARIA DE PRODUÇÃO
+        </div>
+
+        <h1>
+            SUA JORNADA<br>
+            <span>COMEÇA AQUI.</span>
+        </h1>
+
+        <div class="line"></div>
+
+        <p class="subtitle">
+            Tudo para você começar sua graduação.
+        </p>
+
+        <a href="menu.html" class="button">
+            VAMO LÁ
+            <span class="arrow">→</span>
+        </a>
+
+    </div>
+
+</div>
+
+
+<div class="footer">
+    ENGENHARIA DE PRODUÇÃO • APRENDA • ORGANIZE • EVOLUA
+</div>
+
+</body>
+</html>

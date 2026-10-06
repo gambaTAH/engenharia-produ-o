@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Gerenciamento de Projetos</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    color:white;
+    min-height:100vh;
+
+    background:
+    radial-gradient(circle at 80% 10%,rgba(255,193,7,.10),transparent 25%),
+    linear-gradient(135deg,#07111f,#0c1d31,#102a43);
+}
+
+/* FUNDO */
+
+.background{
+    position:fixed;
+    inset:0;
+    z-index:-1;
+    overflow:hidden;
+}
+
+.grid{
+    position:absolute;
+    inset:0;
+
+    background-image:
+    linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);
+
+    background-size:45px 45px;
+}
+
+.circle{
+    position:absolute;
+    border:1px solid rgba(255,193,7,.1);
+    border-radius:50%;
+}
+
+.c1{
+    width:600px;
+    height:600px;
+    right:-300px;
+    top:-300px;
+}
+
+.c2{
+    width:700px;
+    height:700px;
+    left:-500px;
+    bottom:-500px;
+}
+
+/* CONTAINER */
+
+.container{
+    width:min(1200px,92%);
+    margin:auto;
+    padding:40px 0 70px;
+}
+
+/* TOPO */
+
+.top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:45px;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.logo-icon{
+    width:44px;
+    height:44px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:#ffc107;
+    color:#111;
+
+    border-radius:12px;
+    font-size:21px;
+}
+
+.logo h2{
+    font-size:14px;
+    letter-spacing:1px;
+}
+
+.logo span{
+    display:block;
+    font-size:10px;
+    color:#72869b;
+    margin-top:4px;
+}
+
+.back{
+    color:#8193a6;
+    text-decoration:none;
+    font-size:13px;
+}
+
+.back:hover{
+    color:#ffc107;
+}
+
+/* TÍTULO */
+
+.tag{
+    color:#ffc107;
+    font-size:11px;
+    letter-spacing:2px;
+    font-weight:bold;
+    margin-bottom:12px;
+}
+
+h1{
+    font-size:clamp(36px,5vw,56px);
+    letter-spacing:-2px;
+    margin-bottom:12px;
+}
+
+.subtitle{
+    color:#899caf;
+    line-height:1.6;
+    max-width:650px;
+    margin-bottom:40px;
+}
+
+/* SEÇÕES */
+
+.section{
+    margin-bottom:42px;
+}
+
+.section-title{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:18px;
+}
+
+.section-title h2{
+    font-size:16px;
+}
+
+.section-title span{
+    height:1px;
+    flex:1;
+    background:rgba(255,255,255,.07);
+}
+
+/* GRID */
+
+.tools{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(245px,1fr));
+    gap:16px;
+}
+
+/* CARD */
+
+.tool{
+    position:relative;
+
+    padding:22px;
+
+    min-height:155px;
+
+    border-radius:16px;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    background:rgba(255,255,255,.045);
+
+    color:white;
+    text-decoration:none;
+
+    transition:.25s;
+
+    overflow:hidden;
+}
+
+.tool:hover{
+    transform:translateY(-5px);
+
+    border-color:rgba(255,193,7,.45);
+
+    background:rgba(255,255,255,.065);
+
+    box-shadow:0 18px 40px rgba(0,0,0,.25);
+}
+
+.icon{
+    width:45px;
+    height:45px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:12px;
+
+    background:rgba(255,193,7,.1);
+
+    font-size:21px;
+
+    margin-bottom:17px;
+}
+
+.tool h3{
+    font-size:16px;
+    margin-bottom:7px;
+}
+
+.tool p{
+    color:#7f92a7;
+    font-size:12px;
+    line-height:1.5;
+}
+
+.arrow{
+    position:absolute;
+    right:18px;
+    bottom:17px;
+
+    color:#ffc107;
+    font-size:18px;
+
+    transition:.2s;
+}
+
+.tool:hover .arrow{
+    transform:translateX(5px);
+}
+
+/* DESTAQUE */
+
+.featured{
+    border-color:rgba(255,193,7,.25);
+
+    background:
+    linear-gradient(
+        135deg,
+        rgba(255,193,7,.08),
+        rgba(255,255,255,.035)
+    );
+}
+
+/* MOBILE */
+
+@media(max-width:600px){
+
+    .container{
+        padding-top:25px;
+    }
+
+    .top{
+        margin-bottom:35px;
+    }
+
+    .tools{
+        grid-template-columns:1fr;
+    }
+
+    .tool{
+        min-height:140px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="background">
+    <div class="grid"></div>
+    <div class="circle c1"></div>
+    <div class="circle c2"></div>
+</div>
+
+
+<div class="container">
+
+    <header class="top">
+
+        <div class="logo">
+
+            <div class="logo-icon">⚙</div>
+
+            <div>
+                <h2>ENGENHARIA DE PRODUÇÃO</h2>
+                <span>GERENCIAMENTO DE PROJETOS</span>
+            </div>
+
+        </div>
+
+        <a href="menu.html" class="back">
+            ← Voltar
+        </a>
+
+    </header>
+
+
+    <div class="tag">
+        CAIXA DE FERRAMENTAS
+    </div>
+
+    <h1>
+        Gerenciamento de Projetos
+    </h1>
+
+    <p class="subtitle">
+        Ferramentas práticas para planejar, organizar,
+        executar e acompanhar seus projetos.
+    </p>
+
+
+    <!-- COMEÇAR -->
+
+    <section class="section">
+
+        <div class="section-title">
+            <h2>🚀 COMEÇAR UM PROJETO</h2>
+            <span></span>
+        </div>
+
+        <div class="tools">
+
+            <a href="canvas.html" class="tool featured">
+                <div class="icon">📋</div>
+                <h3>Canvas de Projeto</h3>
+                <p>Estruture sua ideia antes de começar.</p>
+                <div class="arrow">→</div>
+            </a>
+
+            <a href="tap.html" class="tool">
+                <div class="icon">📄</div>
+                <h3>Termo de Abertura</h3>
+                <p>Defina oficialmente o início do projeto.</p>
+                <div class="arrow">→</div>
+            </a>
+
+            <a href="stakeholders.html" class="tool">
+                <div class="icon">👥</div>
+                <h3>Stakeholders</h3>
+                <p>Identifique e organize as partes interessadas.</p>
+                <div class="arrow">→</div>
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- PLANEJAMENTO -->
+
+    <section class="section">
+
+        <div class="section-title">
+            <h2>📐 PLANEJAR</h2>
+            <span></span>
+        </div>
+
+        <div class="tools">
+
+            <a href="eap.html" class="tool">
+                <div class="icon">🧩</div>
+                <h3>EAP / WBS</h3>
+                <p>Divida o projeto em entregas e atividades.</p>
+                <div class="arrow">→</div>
+            </a>
+
+            <a href="gantt.html" class="tool">
+                <div class="icon">📅</div>
+                <h3>Gantt</h3>
+                <p>Monte o cronograma visual do projeto.</p>
+                <div class="arrow">→</div>
+            </a>
+
+            <a href="raci.html" class="tool">
+                <div class="icon">👤</div>
+                <h3>Matriz RACI</h3>
+                <p>Defina responsabilidades da equipe.</p>
+                <div class="arrow">→</div>
+            </a>
+
+            <a href="orcamento.html" class="tool">
+                <div class="icon">💰</div>
+                <h3>Orçamento</h3>
+                <p>Planeje e acompanhe os custos.</p>
+                <div class="arrow">→</div>
+            </a>
+
+            <a href="comunicacao.html" class="tool">
+                <div class="icon">📢</div>
+                <h3>Comunicação</h3>
+                <p>Organize como as informações serão transmitidas.</p>
+                <div class="arrow">→</div>
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- CONTROLE -->
+
+    <section class="section">
+
+        <div class="section-title">
+            <h2>⚠️ CONTROLAR E MELHORAR</h2>
+            <span></span>
+        </div>
+
+        <div class="tools">
+
+            <a href="riscos.html" class="tool">
+                <div class="icon">⚠️</div>
+                <h3>Matriz de Riscos</h3>
+                <p>Identifique e classifique os riscos.</p>
+                <div class="arrow">→</div>
+            </a>
+
+            <a href="ishikawa.html" class="tool">
+                <div class="icon">🐟</div>
+                <h3>Ishikawa</h3>
+                <p>Encontre as causas de um problema.</p>
+                <div class="arrow">→</div>
+            </a>
+
+            <a href="5porques.html" class="tool">
+                <div class="icon">❓</div>
+                <h3>5 Porquês</h3>
+                <p>Investigue a causa raiz.</p>
+                <div class="arrow">→</div>
+            </a>
+
+            <a href="pareto.html" class="tool">
+                <div class="icon">📊</div>
+                <h3>Pareto</h3>
+                <p>Identifique os problemas mais importantes.</p>
+                <div class="arrow">→</div>
+            </a>
+
+            <a href="pdca.html" class="tool">
+                <div class="icon">🔄</div>
+                <h3>PDCA</h3>
+                <p>Planeje, execute, verifique e melhore.</p>
+                <div class="arrow">→</div>
+            </a>
+
+            <a href="checklist.html" class="tool">
+                <div class="icon">✅</div>
+                <h3>Checklist</h3>
+                <p>Controle tarefas e atividades.</p>
+                <div class="arrow">→</div>
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- ANÁLISE -->
+
+    <section class="section">
+
+        <div class="section-title">
+            <h2>📈 ANÁLISE DO PROJETO</h2>
+            <span></span>
+        </div>
+
+        <div class="tools">
+
+            <a href="curva-s.html" class="tool">
+                <div class="icon">📈</div>
+                <h3>Curva S</h3>
+                <p>Acompanhe a evolução do projeto.</p>
+                <div class="arrow">→</div>
+            </a>
+
+            <a href="valor-agregado.html" class="tool">
+                <div class="icon">💵</div>
+                <h3>Valor Agregado</h3>
+                <p>Analise custo e desempenho.</p>
+                <div class="arrow">→</div>
+            </a>
+
+            <a href="cpm.html" class="tool">
+                <div class="icon">🔴</div>
+                <h3>CPM</h3>
+                <p>Encontre o caminho crítico.</p>
+                <div class="arrow">→</div>
+            </a>
+
+            <a href="pert.html" class="tool">
+                <div class="icon">🔗</div>
+                <h3>PERT</h3>
+                <p>Estime a duração das atividades.</p>
+                <div class="arrow">→</div>
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- FINALIZAÇÃO -->
+
+    <section class="section">
+
+        <div class="section-title">
+            <h2>🏁 FINALIZAR</h2>
+            <span></span>
+        </div>
+
+        <div class="tools">
+
+            <a href="ata.html" class="tool">
+                <div class="icon">📝</div>
+                <h3>Ata de Reunião</h3>
+                <p>Registre decisões e acontecimentos.</p>
+                <div class="arrow">→</div>
+            </a>
+
+            <a href="licoes.html" class="tool">
+                <div class="icon">📚</div>
+                <h3>Lições Aprendidas</h3>
+                <p>Registre o que funcionou e o que não funcionou.</p>
+                <div class="arrow">→</div>
+            </a>
+
+            <a href="encerramento.html" class="tool">
+                <div class="icon">🏁</div>
+                <h3>Termo de Encerramento</h3>
+                <p>Finalize oficialmente o projeto.</p>
+                <div class="arrow">→</div>
+            </a>
+
+        </div>
+
+    </section>
+
+</div>
+
+</body>
+</html>
